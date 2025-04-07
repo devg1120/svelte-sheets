@@ -153,40 +153,57 @@
          let r2 = String(parseInt(r.i) + 1);
          let c2 = String(parseInt(c.i) + 0);
          let next_cell =  [
-                           encode({ c: c2 , r: r2 }),
-                           encode({ c: c2 , r: r2 }),
-                      ];
+             encode({ c: c2 , r: r2 }),
+             encode({ c: c2 , r: r2 }),
+         ];
+    //console.log(document.getElementById('cell_editor'))
          e.target.remove();
          selected = next_cell
+         //edition = null;
          edition = next_cell;
 
-         let table = document.getElementById('sheet_table');
+let table = document.getElementById('sheet_table');
+//let c = parseInt(x.i)
+//let c2 = c + 1;
 
-         /*
-         for (let row of table.rows) {
-             for(let cell of row.cells){
-                console.log(cell.innerText);
-             }
-         }
-         */
+/*
+for (let row of table.rows) {
+    for(let cell of row.cells){
+       console.log(cell.innerText);
+    }
+}
+*/
 
-         let element = table.rows[parseInt(r2) + 1].cells[parseInt(c2) + 1];
-         let event = new MouseEvent("dblclick", { bubbles: true, cancelable: true });
-         element.dispatchEvent(event);
+      //console.log(table.rows[1].cells[1].innerText);
+      //console.log(table.rows[2].cells[1].innerText);
+      //console.log(table.rows[5].cells[1].innerText);
+      //table.rows[5].cells[1].click();
 
- 
-         async  function next_input_focus() {
-            await  tick()
-            let cell_editor = document.getElementById('cell_editor')
-            cell_editor.focus()
-            cell_editor.click()
-          } ;
-         next_input_focus();
+   console.log("r2 c2:", r2,c2)
+  //let element = table.rows[5].cells[1];
+  let element = table.rows[parseInt(r2) + 1].cells[parseInt(c2) + 1];
+  let event = new MouseEvent("dblclick", { bubbles: true, cancelable: true });
+  element.dispatchEvent(event);
+
+
+      //table.rows[r2].cells[c+1].click();
+
+     /* 
+   function next_input_focus() {
+     tick()
+    console.log(document.getElementById('cell_editor'))
+    document.getElementById('cell_editor').focus()
+    document.getElementById('cell_editor').click()
+    console.log("tick")
+  } ;
+   next_input_focus();
+*/
+
     }
   }
 
   export function onInputChange(value, row, column) {
-    //console.log("onInputChange:", value)
+    console.log("onInputChange:", value)
     cmdz = true;
     if (row.i > data.length - 1) {
       data = [
@@ -355,7 +372,7 @@
   function onMouseDown(e) {
     // if right click
     if (e.which == 3) return;
-    //console.log("mousedown", e.which);
+    console.log("mousedown", e.which);
     if (e.target.id == "square") {
       extension = true;
       selection = false;
@@ -778,7 +795,9 @@
         clear={(e) => (data = clearSelection(data, selected))}
         delet={(e) => (data = deleteSelection(data, selected))}
       />
-
+<!--
+   <table  border="1" style="border-collapse: collapse">
+-->
    <table id = "sheet_table">
       <colgroup>
 
