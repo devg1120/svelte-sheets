@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>e-virt-table</title>
+    </head>
+    <script src="https://unpkg.com/e-virt-table/dist/index.umd.js"></script>
+    <body>
+        <div>
+            <button id="verify-btn">Verify</button>
+            <button id="verify-btn1">Verify And Scroll To The Error</button>
+            <button id="clear-btn">Clear Verification</button>
+            <button id="get-btn">Get Verification</button>
+            <button id="set-btn">Setting Errors</button>
+        </div>
+        <div>
+            <div id="e-virt-table"></div>
+        </div>
+    </body>
+    <script>
+        let data = [
+            {
+                date: '2016-05-03',
+                name: 'Tom',
+                state: 'California',
+                city: 'Los Angeles',
+                address: 'No. 189, Grove St, Los Angeles',
+                zip: 'CA 90036',
+            },
+            {
+                date: '2016-05-02',
+                name: 'Tom',
+                state: 'California',
+                city: 'Los Angeles',
+                address: 'No. 189, Grove St, Los Angeles',
+                zip: 'CA 90036',
+            },
+            {
+                date: '2016-05-04',
+                name: 'Tom',
+                state: 'California',
+                city: 'Los Angeles',
+                address: 'No. 189, Grove St, Los Angeles',
+                zip: 'CA 90036',
+            },
+            {
+                date: '2016-05-01',
+                name: 'Tom',
+                state: 'California',
+                city: 'Los Angeles',
+                address: 'No. 189, Grove St, Los Angeles',
+                zip: 'CA 90036',
+            },
+            {
+                date: '2016-05-08',
+                name: 'Tom',
+                state: 'California',
+                city: 'Los Angeles',
+                address: 'No. 189, Grove St, Los Angeles',
+                zip: 'CA 90036',
+            },
+            {
+                date: '2016-05-06',
+                name: 'Tom',
+                state: 'California',
+                city: 'Los Angeles',
+                address: 'No. 189, Grove St, Los Angeles',
+                zip: 'CA 90036',
+            },
+            {
+                date: '2016-05-07',
+                name: 'Tom',
+                state: 'California',
+                city: 'Los Angeles',
+                address: 'No. 189, Grove St, Los Angeles',
+                zip: 'CA 90036',
+            },
+        ];
+        let columns = [
+            {
+                title: 'Name',
+                key: 'name',
+                readonly: true,
+                width: 100,
+                widthFillDisable: true,
+            },
+            {
+                title: 'State',
+                key: 'state',
+                width: 100,
+                widthFillDisable: true,
+            },
+            {
+                title: 'City',
+                key: 'city',
+                width: 1000,
+                widthFillDisable: true,
+            },
+            {
+                title: 'Address',
+                key: 'address',
+                width: 200,
+                widthFillDisable: true,
+                rules: {
+                    validator(rule, value, callback) {
+                        if (!value) {
+                            callback('请输入');
+                        } else if (value.length > 20) {
+                            callback('字段长度必须小于20个字符哦！');
+                        } else {
+                            callback();
+                        }
+                    },
+                },
+            },
+            {
+                title: 'Zip',
+                key: 'zip',
+            },
+            {
+                title: 'email',
+                key: 'email',
+                rules: [
+                    {
+                        required: true,
+                        message: '请输入',
+                    },
+                    {
+                        required: true,
+                        type: 'email',
+                        message: '请输入正确的邮箱',
+                    },
+                ],
+            },
+        ];
+        const target = document.getElementById('e-virt-table');
+        const grid = new EVirtTable(target, {
+            data,
+            columns,
+            config: {
+                RESIZE_COLUMN_MIN_WIDTH: 100, // 调整最小列宽
+                ENABLE_SELECTOR: true,
+                ENABLE_AUTOFILL: true,
+                ENABLE_HISTORY: true,
+            },
+        });
+        grid.on('validateChangedData', (changeData) => {
+            console.log('validateChangedData', changeData);
+        });
+        // 不滚动到错误点
+        document.getElementById('verify-btn').addEventListener('click', () => {
+            console.log('2222');
+
+            grid.validate(false);
+        });
+        document.getElementById('verify-btn1').addEventListener('click', () => {
+            grid.validate();
+        });
+        document.getElementById('clear-btn').addEventListener('click', () => {
+            grid.clearValidate();
+        });
+        document.getElementById('get-btn').addEventListener('click', () => {
+            grid.getValidations();
+        });
+        document.getElementById('set-btn').addEventListener('click', () => {
+            const errors = [
+                {
+                    key: 'address',
+                    rowIndex: 0,
+                    message: '设置Address错误1',
+                },
+                {
+                    key: 'address',
+                    rowIndex: 3,
+                    message: '设置Address错误3',
+                },
+            ];
+            grid.setValidations(errors);
+        });
+    </script>
+</html>

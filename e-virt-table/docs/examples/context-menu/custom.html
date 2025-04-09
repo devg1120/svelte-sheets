@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>e-virt-table</title>
+    </head>
+    <script src="https://unpkg.com/e-virt-table/dist/index.umd.js"></script>
+    <body>
+        <div id="e-virt-table">
+            <div id="e-virt-table-context-menu">
+                <div id="e-virt-table-context-menu-copy">copy</div>
+                <div id="e-virt-table-context-menu-cut">cut</div>
+                <div id="e-virt-table-context-menu-paste">paste</div>
+            </div>
+        </div>
+    </body>
+    <script>
+        let data = [
+            {
+                date: '2016-05-03',
+                name: 'Tom',
+                state: 'California',
+                city: 'Los Angeles',
+                address: 'No. 189, Grove St, Los Angeles',
+                zip: 'CA 90036',
+            },
+            {
+                date: '2016-05-02',
+                name: 'Tom',
+                state: 'California',
+                city: 'Los Angeles',
+                address: 'No. 189, Grove St, Los Angeles',
+                zip: 'CA 90036',
+            },
+            {
+                date: '2016-05-04',
+                name: 'Tom',
+                state: 'California',
+                city: 'Los Angeles',
+                address: 'No. 189, Grove St, Los Angeles',
+                zip: 'CA 90036',
+            },
+            {
+                date: '2016-05-01',
+                name: 'Tom',
+                state: 'California',
+                city: 'Los Angeles',
+                address: 'No. 189, Grove St, Los Angeles',
+                zip: 'CA 90036',
+            },
+            {
+                date: '2016-05-08',
+                name: 'Tom',
+                state: 'California',
+                city: 'Los Angeles',
+                address: 'No. 189, Grove St, Los Angeles',
+                zip: 'CA 90036',
+            },
+            {
+                date: '2016-05-06',
+                name: 'Tom',
+                state: 'California',
+                city: 'Los Angeles',
+                address: 'No. 189, Grove St, Los Angeles',
+                zip: 'CA 90036',
+            },
+            {
+                date: '2016-05-07',
+                name: 'Tom',
+                state: 'California',
+                city: 'Los Angeles',
+                address: 'No. 189, Grove St, Los Angeles',
+                zip: 'CA 90036',
+            },
+        ];
+        let columns = [
+            {
+                type: 'index',
+                key: 'index',
+                width: 50,
+            },
+            {
+                title: 'Date',
+                key: 'date',
+            },
+            {
+                title: 'Name',
+                key: 'name',
+            },
+            {
+                title: 'State',
+                key: 'state',
+            },
+            {
+                title: 'City',
+                key: 'city',
+            },
+            {
+                title: 'Address',
+                key: 'address',
+                width: 200,
+            },
+            {
+                title: 'Zip',
+                key: 'zip',
+            },
+        ];
+        const target = document.getElementById('e-virt-table');
+        const contextMenuElement = document.getElementById('e-virt-table-context-menu');
+        const grid = new EVirtTable(target, {
+            data,
+            columns,
+            config: {
+                ENABLE_SELECTOR: true,
+                ENABLE_AUTOFILL: true,
+                ENABLE_CONTEXT_MENU: true,
+            },
+            contextMenuElement,
+        });
+        const copyElement = document.getElementById('e-virt-table-context-menu-copy');
+        copyElement.addEventListener('click', () => {
+            grid.emit('contextMenuCopy');
+            grid.contextMenuHide();
+        });
+        const cutElement = document.getElementById('e-virt-table-context-menu-cut');
+        cutElement.addEventListener('click', () => {
+            grid.emit('contextMenuCut');
+            grid.contextMenuHide();
+        });
+        const pasteElement = document.getElementById('e-virt-table-context-menu-paste');
+        pasteElement.addEventListener('click', () => {
+            grid.emit('contextMenuPaste');
+            grid.contextMenuHide();
+        });
+    </script>
+</html>
