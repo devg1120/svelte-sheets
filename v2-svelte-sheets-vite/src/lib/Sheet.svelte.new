@@ -657,30 +657,39 @@
         c: br.c > tl.c ? br.c + 1 : tl.c + 1,
         r: br.r > tl.r ? br.r + 1 : tl.r + 1,
       };
+
       let top = 28;
       let right = 51;
       let bottom = 28;
       let left = 51;
+
+
       for (let i = 0; i < topLeft.r; i++) {
-        top = top + getRowHeight(i);
+        top = top + getRowHeight(i) ;
       }
       for (let i = 0; i < topLeft.c; i++) {
         left = left + getColumnsWidth(i);
       }
       for (let i = 0; i < bottomRight.r; i++) {
-        bottom = bottom + getRowHeight(i);
+        bottom = bottom + getRowHeight(i) ;
       }
       for (let i = 0; i < bottomRight.c; i++) {
         right = right + getColumnsWidth(i);
       }
+
+
       tops.style = `width: ${right - left}px; left: ${left}px; top: ${top}px`;
+
       rights.style = `height: ${
         bottom - top
-      }px; left: ${right}px; top: ${top}px`;
+      }px; left: ${right}px; top: ${top-26}px`;
+
       bottoms.style = `width: ${
         right - left
       }px; left: ${left}px; top: ${bottom}px`;
+
       lefts.style = `height: ${bottom - top}px; left: ${left}px; top: ${top}px`;
+
       colLine.style = `width: ${right - left}px; left: ${left}px; top: 28px;`;
       rowLine.style = `height: ${bottom - top}px; left: 51px; top: ${top}px`;
       square.style = `left:${right}px; top:${bottom}px`;
@@ -711,6 +720,7 @@
   on:mouseover={onMouseOver}
   tabindex="1"
 >
+
   <div
     class="jexcel_content"
     style={config.tableWidth
@@ -723,6 +733,8 @@
     bind:offsetWidth={viewport_width}
     on:scroll={handle_scroll}
   >
+
+<!----------->
     <div
       cellpadding="0"
       cellspacing="0"
@@ -731,6 +743,8 @@
       style="padding-top: {top}px; padding-bottom: {bottom}px; padding-left: {left}px; padding-right: {right}px;"
       bind:this={contents}
     >
+
+
       <div
         class="top-extend absolute"
         class:hidden={!extension}
@@ -751,13 +765,19 @@
         class:hidden={!extension}
         bind:this={rightextend}
       />
+
       <div class="top-select absolute" bind:this={tops} />
+
       <div class="bottom-select absolute" bind:this={bottoms} />
       <div class="left-select absolute" bind:this={lefts} />
       <div class="right-select absolute" bind:this={rights} />
+
+
       <div class="col-line absolute" bind:this={colLine} />
       <div class="row-line absolute" bind:this={rowLine} />
-      <div
+
+
+      <div                       
         tabindex={-1}
         use:draggable
         on:dragging={(e) => {
@@ -768,6 +788,7 @@
         id="square"
         bind:this={square}
       />
+
       <Menu
         show={!!menuX}
         x={menuX}
@@ -792,6 +813,8 @@
         class:resizable={config.columnResize || config.rowResize}
         class="resizable"
       >
+
+
         <tr>
           <th class="jexcel_selectall virtual-col" />
           {#each visibleX as c, i}
@@ -954,7 +977,9 @@
         {/each}
       </tbody>
     </table>
+<!------>
   </div>
+
   </div>
 </div>
 
@@ -987,8 +1012,8 @@
     user-select: none;
   }
   table {
-     border-collapse: separate;
-    /*border-collapse: collapse;*/
+    /* border-collapse: separate;*/
+    border-collapse: collapse;           /* GUSA */
     table-layout: fixed;
     white-space: nowrap;
     empty-cells: show;
@@ -1042,6 +1067,10 @@
     line-height: 1em;
     text-align: end;
     cursor: cell;
+    border-top: 1px solid #ccc;              /* GUSA */
+    border-left: 1px solid #ccc;
+    border-right: 0px solid transparent;
+    border-bottom: 0px solid transparent;
 
   }
   tbody > tr > td.selected {
@@ -1165,7 +1194,9 @@ table thead  {
     outline: none;
   }
   .absolute {
-    position: absolute;
+     position: relative;
+    /* position: absolute;*/
+    /* position: sticky */;
     z-index: 10;
     transition: all 0.1s linear;
   }

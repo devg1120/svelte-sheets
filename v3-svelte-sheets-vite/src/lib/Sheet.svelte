@@ -153,40 +153,58 @@
          let r2 = String(parseInt(r.i) + 1);
          let c2 = String(parseInt(c.i) + 0);
          let next_cell =  [
-                           encode({ c: c2 , r: r2 }),
-                           encode({ c: c2 , r: r2 }),
-                      ];
+             encode({ c: c2 , r: r2 }),
+             encode({ c: c2 , r: r2 }),
+         ];
+    //console.log(document.getElementById('cell_editor'))
          e.target.remove();
          selected = next_cell
+         //edition = null;
          edition = next_cell;
 
-         let table = document.getElementById('sheet_table');
+let table = document.getElementById('sheet_table');
+//let c = parseInt(x.i)
+//let c2 = c + 1;
 
-         /*
-         for (let row of table.rows) {
-             for(let cell of row.cells){
-                console.log(cell.innerText);
-             }
-         }
-         */
+/*
+for (let row of table.rows) {
+    for(let cell of row.cells){
+       console.log(cell.innerText);
+    }
+}
+*/
 
-         let element = table.rows[parseInt(r2) + 1].cells[parseInt(c2) + 1];
-         let event = new MouseEvent("dblclick", { bubbles: true, cancelable: true });
-         element.dispatchEvent(event);
+      //console.log(table.rows[1].cells[1].innerText);
+      //console.log(table.rows[2].cells[1].innerText);
+      //console.log(table.rows[5].cells[1].innerText);
+      //table.rows[5].cells[1].click();
+
+   console.log("r2 c2:", r2,c2)
+  //let element = table.rows[5].cells[1];
+  let element = table.rows[parseInt(r2) + 1].cells[parseInt(c2) + 1];
+  let event = new MouseEvent("dblclick", { bubbles: true, cancelable: true });
+  element.dispatchEvent(event);
+
+
+      //table.rows[r2].cells[c+1].click();
 
  
-         async  function next_input_focus() {
-            await  tick()
-            let cell_editor = document.getElementById('cell_editor')
-            cell_editor.focus()
-            cell_editor.click()
-          } ;
-         next_input_focus();
+ async  function next_input_focus() {
+   await  tick()
+    //console.log(document.getElementById('cell_editor'))
+    let cell_editor = document.getElementById('cell_editor')
+    cell_editor.focus()
+    cell_editor.click()
+    console.log("tick")
+  } ;
+   next_input_focus();
+
+
     }
   }
 
   export function onInputChange(value, row, column) {
-    //console.log("onInputChange:", value)
+    console.log("onInputChange:", value)
     cmdz = true;
     if (row.i > data.length - 1) {
       data = [
@@ -355,7 +373,7 @@
   function onMouseDown(e) {
     // if right click
     if (e.which == 3) return;
-    //console.log("mousedown", e.which);
+    console.log("mousedown", e.which);
     if (e.target.id == "square") {
       extension = true;
       selection = false;
@@ -599,6 +617,7 @@
   let squareY;
   let topLeft;
   let bottomRight;
+
   $: {
     if (extension && extended) {
       let tl = (selected && decode(extended[0])) || { c: 0, r: 0 };
@@ -657,37 +676,50 @@
         c: br.c > tl.c ? br.c + 1 : tl.c + 1,
         r: br.r > tl.r ? br.r + 1 : tl.r + 1,
       };
-      let top = 28;
+      console.log("topLeft",topLeft);
+      console.log("bottomRight", bottomRight);
+
+/*
+      let top = 30;
       let right = 51;
       let bottom = 28;
       let left = 51;
       for (let i = 0; i < topLeft.r; i++) {
-        top = top + getRowHeight(i);
+        top = top + getRowHeight(i)+1 ;
       }
       for (let i = 0; i < topLeft.c; i++) {
         left = left + getColumnsWidth(i);
       }
       for (let i = 0; i < bottomRight.r; i++) {
-        bottom = bottom + getRowHeight(i);
+        bottom = bottom + getRowHeight(i)+0.5;
       }
       for (let i = 0; i < bottomRight.c; i++) {
         right = right + getColumnsWidth(i);
       }
-      tops.style = `width: ${right - left}px; left: ${left}px; top: ${top}px`;
-      rights.style = `height: ${
-        bottom - top
-      }px; left: ${right}px; top: ${top}px`;
-      bottoms.style = `width: ${
-        right - left
-      }px; left: ${left}px; top: ${bottom}px`;
-      lefts.style = `height: ${bottom - top}px; left: ${left}px; top: ${top}px`;
-      colLine.style = `width: ${right - left}px; left: ${left}px; top: 28px;`;
-      rowLine.style = `height: ${bottom - top}px; left: 51px; top: ${top}px`;
-      square.style = `left:${right}px; top:${bottom}px`;
+
+      //tops.style = `width: ${right - left}px; left: ${left}px; top: ${top}px`;
+
+      //rights.style = `height: ${
+      //  bottom - top
+      //}px; left: ${right}px; top: ${top}px`;
+
+      //bottoms.style = `width: ${
+      //  right - left
+      //}px; left: ${left}px; top: ${bottom}px`;
+
+      //lefts.style = `height: ${bottom - top}px; left: ${left}px; top: ${top}px`;
+
+      //colLine.style = `width: ${right - left}px; left: ${left}px; top: 28px;`;
+      //rowLine.style = `height: ${bottom - top}px; left: 51px; top: ${top}px`;
+      //square.style = `left:${right}px; top:${bottom}px`;
       selectWidth = right - left;
       selectHeight = bottom - top;
+*/
     }
   }
+
+
+
   // history logic
 
   function historyPush(data, rows, columns, style) {
@@ -723,6 +755,7 @@
     bind:offsetWidth={viewport_width}
     on:scroll={handle_scroll}
   >
+<!------------
     <div
       cellpadding="0"
       cellspacing="0"
@@ -731,6 +764,7 @@
       style="padding-top: {top}px; padding-bottom: {bottom}px; padding-left: {left}px; padding-right: {right}px;"
       bind:this={contents}
     >
+--->
       <div
         class="top-extend absolute"
         class:hidden={!extension}
@@ -751,12 +785,14 @@
         class:hidden={!extension}
         bind:this={rightextend}
       />
+<!--
       <div class="top-select absolute" bind:this={tops} />
       <div class="bottom-select absolute" bind:this={bottoms} />
       <div class="left-select absolute" bind:this={lefts} />
       <div class="right-select absolute" bind:this={rights} />
       <div class="col-line absolute" bind:this={colLine} />
       <div class="row-line absolute" bind:this={rowLine} />
+
       <div
         tabindex={-1}
         use:draggable
@@ -768,6 +804,31 @@
         id="square"
         bind:this={square}
       />
+
+
+      <div class="top-select relative" bind:this={tops} />
+      <div class="bottom-select relative" bind:this={bottoms} />
+      <div class="left-select relative" bind:this={lefts} />
+      <div class="right-select relaitive" bind:this={rights} />
+      <div class="col-line relative" bind:this={colLine} />
+      <div class="row-line relative" bind:this={rowLine} />
+
+-->
+
+
+<!--
+      <div
+        tabindex={-1}
+        use:draggable
+        on:dragging={(e) => {
+          squareX = e.detail.x;
+          squareY = e.detail.y;
+        }}
+        class="square relative"
+        id="square"
+        bind:this={square}
+      />
+-->
       <Menu
         show={!!menuX}
         x={menuX}
@@ -778,7 +839,9 @@
         clear={(e) => (data = clearSelection(data, selected))}
         delet={(e) => (data = deleteSelection(data, selected))}
       />
-
+<!--
+   <table  border="1" style="border-collapse: collapse">
+-->
    <table id = "sheet_table">
       <colgroup>
 
@@ -955,7 +1018,9 @@
       </tbody>
     </table>
   </div>
+<!--
   </div>
+-->
 </div>
 
 <style>
@@ -987,8 +1052,8 @@
     user-select: none;
   }
   table {
-     border-collapse: separate;
-    /*border-collapse: collapse;*/
+    /* border-collapse: separate;*/
+    border-collapse: collapse;
     table-layout: fixed;
     white-space: nowrap;
     empty-cells: show;
@@ -1042,6 +1107,10 @@
     line-height: 1em;
     text-align: end;
     cursor: cell;
+    border-top: 1px solid #ccc;              /* GUSA */
+    border-left: 1px solid #ccc;
+    border-right: 0px solid transparent;
+    border-bottom: 0px solid transparent;
 
   }
   tbody > tr > td.selected {
@@ -1164,8 +1233,15 @@ table thead  {
     margin: -4px 0;
     outline: none;
   }
+
   .absolute {
     position: absolute;
+    z-index: 10;
+    transition: all 0.1s linear;
+  }
+
+  .relative {
+    position: relative;
     z-index: 10;
     transition: all 0.1s linear;
   }

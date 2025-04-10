@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount, tick } from "svelte";
-  import * as XLSX from "xlsx";
+  import XLSX from "xlsx";
   import { resizable } from "./actions";
   import { draggable } from "./actions/draggable";
   import type { Config } from "./defaultconfig";
@@ -145,48 +145,7 @@
     }
   }
 
-  export function onInputKeyDown(e, r, c) {
-    //console.log("onInputKeyDown:", e.key, r, x)
-    //console.log("selected:", selected)
-
-    if (e.key == "Enter") {
-         let r2 = String(parseInt(r.i) + 1);
-         let c2 = String(parseInt(c.i) + 0);
-         let next_cell =  [
-                           encode({ c: c2 , r: r2 }),
-                           encode({ c: c2 , r: r2 }),
-                      ];
-         e.target.remove();
-         selected = next_cell
-         edition = next_cell;
-
-         let table = document.getElementById('sheet_table');
-
-         /*
-         for (let row of table.rows) {
-             for(let cell of row.cells){
-                console.log(cell.innerText);
-             }
-         }
-         */
-
-         let element = table.rows[parseInt(r2) + 1].cells[parseInt(c2) + 1];
-         let event = new MouseEvent("dblclick", { bubbles: true, cancelable: true });
-         element.dispatchEvent(event);
-
- 
-         async  function next_input_focus() {
-            await  tick()
-            let cell_editor = document.getElementById('cell_editor')
-            cell_editor.focus()
-            cell_editor.click()
-          } ;
-         next_input_focus();
-    }
-  }
-
   export function onInputChange(value, row, column) {
-    //console.log("onInputChange:", value)
     cmdz = true;
     if (row.i > data.length - 1) {
       data = [
@@ -355,7 +314,7 @@
   function onMouseDown(e) {
     // if right click
     if (e.which == 3) return;
-    //console.log("mousedown", e.which);
+    console.log("mousedown", e.which);
     if (e.target.id == "square") {
       extension = true;
       selection = false;
@@ -723,7 +682,7 @@
     bind:offsetWidth={viewport_width}
     on:scroll={handle_scroll}
   >
-    <div
+    <table
       cellpadding="0"
       cellspacing="0"
       unselectable={true}
@@ -778,10 +737,7 @@
         clear={(e) => (data = clearSelection(data, selected))}
         delet={(e) => (data = deleteSelection(data, selected))}
       />
-
-   <table id = "sheet_table">
       <colgroup>
-
         <col width={50} />
         {#each visibleX as v}
           <col width={getColumnsWidth(v.i)} />
@@ -935,13 +891,12 @@
               >
                 {#if String(edition) == String([x.i, r.i])}
                   <input
-                    id = "cell_editor"
+                    autofocus
                     on:blur={(e) => {
                       cmdz = false;
                       historyPush(data, rows, columns, style);
                     }}
                     on:input={(e) => onInputChange(e.target.value, r, x)}
-                    on:keydown={(e) => onInputKeyDown(e, r,x )}
                     value={(data[r.i] && data[r.i][x.i]) || ""}
                     style={`width: ${getColumnsWidth(
                       x.i
@@ -954,7 +909,6 @@
         {/each}
       </tbody>
     </table>
-  </div>
   </div>
 </div>
 
@@ -987,8 +941,7 @@
     user-select: none;
   }
   table {
-     border-collapse: separate;
-    /*border-collapse: collapse;*/
+    border-collapse: separate;
     table-layout: fixed;
     white-space: nowrap;
     empty-cells: show;
@@ -1008,13 +961,8 @@
     background-color: #dcdcdc;
     color: teal;
   }
- /* thead > tr > th,*/
   thead > tr > td {
     background-color: #f3f3f3;
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
     padding: 2px;
     cursor: s-resize;
     box-sizing: border-box;
@@ -1023,7 +971,6 @@
     top: 0;
     z-index: 2;
   }
-
   td {
     outline: none;
     cursor: default;
@@ -1033,7 +980,6 @@
     border-left: 1px solid #ccc;
     border-right: 1px solid transparent;
     border-bottom: 1px solid transparent;
-
   }
   tbody > tr > td {
     padding: 4px;
@@ -1042,14 +988,11 @@
     line-height: 1em;
     text-align: end;
     cursor: cell;
-
   }
   tbody > tr > td.selected {
     background-color: #ddd;
     transition: all 0.1s linear;
   }
-
-/*
   tbody > tr > th,
   thead > tr > th {
     position: sticky;
@@ -1064,50 +1007,6 @@
     font-weight: normal;
     height: 27px;
   }
-*/
-/*
-  thead > tr > th {
-    position: sticky;
-    left: 0;
-    cursor: e-resize;
-    top: auto;
-    background: #f3f3f3;
-    border-top: 1px solid #ccc;
-    border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
-    z-index: 2;
-    font-weight: normal;
-    height: 27px;
-  }
-*/
- thead > tr > th {
-    background-color: #f3f3f3;
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
-    padding: 2px;
-    cursor: s-resize;
-    box-sizing: border-box;
-    overflow: hidden;
-    position: sticky;
-    top: 0;
-    z-index: 2;
-    height: 27px;
-  }
-  tbody > tr > th {
-    position: sticky;
-    left: 0;
-    cursor: e-resize;
-    top: auto;
-    background: #f3f3f3;
-    border-top: 1px solid #ccc;
-    border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
-    z-index: 1;
-    font-weight: normal;
-    height: 27px;
-  }
 
   /* tbody > tr > td:first-child {
     position: relative;
@@ -1118,18 +1017,6 @@
     background-color: #dcdcdc !important;
     color: teal;
   }
-
-table,table th,table td{     /* GUSA */
- border-spacing:0px;
-}
-/*
-table thead  {
-  position: -webkit-sticky;
-  position: sticky;
-  top: 0;
-  z-index: 1;
-}
-*/
 
   div.col-resize {
     position: absolute;
