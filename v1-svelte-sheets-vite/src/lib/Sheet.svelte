@@ -373,7 +373,7 @@ for (let row of table.rows) {
   function onMouseDown(e) {
     // if right click
     if (e.which == 3) return;
-    console.log("mousedown", e.which);
+    //console.log("mousedown", e.which);
     if (e.target.id == "square") {
       extension = true;
       selection = false;
@@ -629,6 +629,10 @@ for (let row of table.rows) {
         c: br.c > tl.c ? br.c + 1 : tl.c + 1,
         r: br.r > tl.r ? br.r + 1 : tl.r + 1,
       };
+
+      console.log("topLeft",topLeft);
+      console.log("bottomRight",bottomRight);
+
       let top = 28;
       let right = 51;
       let bottom = 28;
@@ -636,6 +640,8 @@ for (let row of table.rows) {
       for (let i = 0; i < topLeft.r; i++) {
         top = top + getRowHeight(i);
       }
+      //top += (topLeft.r -1) *1.5
+
       for (let i = 0; i < topLeft.c; i++) {
         left = left + getColumnsWidth(i);
       }
@@ -663,6 +669,7 @@ for (let row of table.rows) {
   let selectWidth: number;
   let selectHeight: number;
 
+
   $: {
     if (mounted) {
       let tl = (selected && decode(selected[0])) || { c: 0, r: 0 };
@@ -675,6 +682,8 @@ for (let row of table.rows) {
         c: br.c > tl.c ? br.c + 1 : tl.c + 1,
         r: br.r > tl.r ? br.r + 1 : tl.r + 1,
       };
+      console.log("topLeft",topLeft);
+      console.log("bottomRight",bottomRight);
       let top = 28;
       let right = 51;
       let bottom = 28;
@@ -691,6 +700,11 @@ for (let row of table.rows) {
       for (let i = 0; i < bottomRight.c; i++) {
         right = right + getColumnsWidth(i);
       }
+
+      top += (topLeft.r -1 ) *0.05
+      bottom += (topLeft.r -1) *0.05
+      right -= 1
+
       tops.style = `width: ${right - left}px; left: ${left}px; top: ${top}px`;
       rights.style = `height: ${
         bottom - top
@@ -704,8 +718,10 @@ for (let row of table.rows) {
       square.style = `left:${right}px; top:${bottom}px`;
       selectWidth = right - left;
       selectHeight = bottom - top;
+
     }
   }
+
   // history logic
 
   function historyPush(data, rows, columns, style) {
@@ -729,6 +745,8 @@ for (let row of table.rows) {
   on:mouseover={onMouseOver}
   tabindex="1"
 >
+
+
   <div
     class="jexcel_content"
     style={config.tableWidth
@@ -741,6 +759,12 @@ for (let row of table.rows) {
     bind:offsetWidth={viewport_width}
     on:scroll={handle_scroll}
   >
+
+
+
+
+<!--
+
     <div
       cellpadding="0"
       cellspacing="0"
@@ -749,6 +773,7 @@ for (let row of table.rows) {
       style="padding-top: {top}px; padding-bottom: {bottom}px; padding-left: {left}px; padding-right: {right}px;"
       bind:this={contents}
     >
+-->
       <div
         class="top-extend absolute"
         class:hidden={!extension}
@@ -769,6 +794,7 @@ for (let row of table.rows) {
         class:hidden={!extension}
         bind:this={rightextend}
       />
+
       <div class="top-select absolute" bind:this={tops} />
       <div class="bottom-select absolute" bind:this={bottoms} />
       <div class="left-select absolute" bind:this={lefts} />
@@ -786,6 +812,26 @@ for (let row of table.rows) {
         id="square"
         bind:this={square}
       />
+
+<!--
+      <div class="top-select relative" bind:this={tops} />
+      <div class="bottom-select relative" bind:this={bottoms} />
+      <div class="left-select absolute" bind:this={lefts} />
+      <div class="right-select absolute" bind:this={rights} />
+      <div
+        tabindex={-1}
+        use:draggable
+        on:dragging={(e) => {
+          squareX = e.detail.x;
+          squareY = e.detail.y;
+        }}
+        class="square relative"
+        id="square"
+        bind:this={square}
+      />
+
+-->
+
       <Menu
         show={!!menuX}
         x={menuX}
@@ -975,7 +1021,9 @@ for (let row of table.rows) {
       </tbody>
     </table>
   </div>
+<!--
   </div>
+-->
 </div>
 
 <style>
@@ -991,12 +1039,14 @@ for (let row of table.rows) {
   :root {
     tab-size: 4;
   }
+
   .jexcel_content {
     overflow-x: auto;
     overflow-y: auto;
     max-width: 100vw;
     max-height: 100vh;
   }
+
   .sheet_container {
     display: block;
     padding-right: 2px;
@@ -1007,6 +1057,7 @@ for (let row of table.rows) {
     user-select: none;
   }
   table {
+    position :absolute;
     /* border-collapse: separate;*/
     border-collapse: collapse;
     table-layout: fixed;
@@ -1200,14 +1251,15 @@ table thead  {
     z-index: 10;
     transition: all 0.1s linear;
   }
+
   .top-select,
   .bottom-select,
   .col-line {
-    border-bottom: 2px solid teal;
+    border-bottom: 2px solid #1E90FF;
   }
   .left-select,
   .right-select {
-    border-left: 2px solid teal;
+    border-left: 2px solid #1E90FF;
   }
 
   .top-extend,
@@ -1219,14 +1271,14 @@ table thead  {
     border-left: 2px solid #aaa;
   }
   .row-line {
-    border-right: 1px solid teal;
+    border-right: 2px solid #1E90FF;
   }
   .square {
     height: 8px;
     width: 8px;
     cursor: crosshair;
     border: 1px solid white;
-    background: teal;
+    background: #1E90FF;
     transform: translate3D(-40%, -40%, 0);
   }
   .hidden {
