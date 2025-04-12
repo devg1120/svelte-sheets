@@ -962,7 +962,6 @@ for (let row of table.rows) {
     position: relative;
     user-select: none;
   }
-
   table {
     position: absolute;
     /* border-collapse: separate;*/
@@ -988,7 +987,6 @@ for (let row of table.rows) {
     background-color: #dcdcdc;
     color: teal;
   }
-
   /* thead > tr > th,*/
   thead > tr > td {
     background-color: #f3f3f3;
@@ -1003,7 +1001,7 @@ for (let row of table.rows) {
     overflow: hidden;
     position: sticky;
     top: 0;
-    z-index: 10;
+    z-index: 9;
   }
 
   td {
@@ -1033,25 +1031,9 @@ for (let row of table.rows) {
     transition: all 0.1s linear;
   }
 
-
-  thead > tr > th {      // top-left corner
-    background-color: #f3f3f3;
-    background-color: pink;
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
-    padding: 2px;
-    cursor: s-resize;
-    box-sizing: border-box;
-    overflow: hidden;
-    position: sticky;
-    top: 0px;
-    z-index: 25;
-    height: 27px;
-  }
-  
-  tbody > tr > th {    // left header
+  /*
+  tbody > tr > th,
+  thead > tr > th {
     position: sticky;
     left: 0;
     cursor: e-resize;
@@ -1064,14 +1046,59 @@ for (let row of table.rows) {
     font-weight: normal;
     height: 27px;
   }
-  
-/*
-   tbody > tr > td:first-child {
+*/
+  /*
+  thead > tr > th {
+    position: sticky;
+    left: 0;
+    cursor: e-resize;
+    top: auto;
+    background: #f3f3f3;
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    z-index: 2;
+    font-weight: normal;
+    height: 27px;
+  }
+*/
+  thead > tr > th {
+    background-color: #f3f3f3;
+    background-color: pink;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    padding: 2px;
+    cursor: s-resize;
+    box-sizing: border-box;
+    overflow: hidden;
+    position: sticky;
+    top: 0px;
+    left:0px;
+    z-index: 10;
+    height: 27px;
+  }
+  tbody > tr > th {
+    position: sticky;
+    left: 0;
+    cursor: e-resize;
+    top: auto;
+    background: #f3f3f3;
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    z-index: 1;
+    font-weight: normal;
+    height: 27px;
+  }
+
+  /* tbody > tr > td:first-child {
     position: relative;
     background-color: #f3f3f3;
     text-align: center;
-  } 
-*/
+  } */
+
   tbody > tr > th.selected {
     background-color: #dcdcdc !important;
     color: teal;
@@ -1083,7 +1110,20 @@ for (let row of table.rows) {
     /* GUSA */
     border-spacing: 0px;
   }
-
+/*
+.sticky_table  tr:nth-child(1){
+    position: -webkit-sticky;
+    position: sticky;
+    top: 24px;
+    z-index: 100;
+}
+.sticky_table  tr:nth-child(2){
+    position: -webkit-sticky;
+    position: sticky;
+    top: 48px;
+    z-index: 100;
+}
+*/
   div.col-resize {
     position: absolute;
     top: 0;
@@ -1134,10 +1174,12 @@ for (let row of table.rows) {
   .bottom-select,
   .col-line {
     border-bottom: 2px solid #1e90ff;
+    z-index: 1;
   }
   .left-select,
   .right-select {
     border-left: 2px solid #1e90ff;
+    z-index: 1;
   }
 
   .top-extend,
@@ -1163,13 +1205,19 @@ for (let row of table.rows) {
     display: none;
   }
 
-/***********************************************************/
-/*
+/******************************************************************/
+
+.sticky_table  thead > tr:nth-child(1){
+    position: sticky;  
+    top: 0px;
+    z-index: 20; 
+}
+
 .sticky_table  tbody > tr:nth-child(1){
     position: sticky;  
     top: 28px;
     background: green;
-    z-index: 10; 
+    z-index: 20; 
 }
 
 .sticky_table tbody > tr:nth-child(2){
@@ -1177,7 +1225,7 @@ for (let row of table.rows) {
     position: sticky;
     top: 52px;
     background: red;
-    z-index: 10;
+    z-index: 20;
 }
 
 .sticky_table tbody >  tr:nth-child(3){
@@ -1185,41 +1233,51 @@ for (let row of table.rows) {
     position: sticky;
     top: 76px;
     background: blue;
-    z-index: 10;
+    z-index: 20;
 }
 
-
-.sticky_table  th:nth-child(1),
-.sticky_table  td:nth-child(1) {
-    position: sticky;
-    left: 0;
-    width: 50px;
-    min-width: 50px;
-    z-index:2;
-}
-*/
-
-/***********************************************************/
-
+/******************************************************************/
 /*
-.sticky_table  th:nth-child(2),
+.sticky_table  thead > tr > td {
+    background-color: orange;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    padding: 2px;
+    cursor: s-resize;
+    box-sizing: border-box;
+    overflow: hidden;
+    position: sticky;
+    top: 0;
+    z-index: 30;   
+  }
+*/
+/*.sticky_table  th:nth-child(2),*/
 .sticky_table  td:nth-child(2) {
     position: sticky;
     left: 51px;
     width: 100px;
     min-width: 100px;
     background: lightblue;
-    z-index:2;
+    z-index:18;
 }
 
-.sticky_table  th:nth-child(3),
+.sticky_table  td:nth-child(2)  tr  td {
+    position: sticky;
+    top 0;
+    z-index:110;
+}
+
+/* .sticky_table  th:nth-child(3),*/
 .sticky_table  td:nth-child(3) {
     position: sticky;
     left: 200px;
     width: 100px;
     min-width: 100px;
     background: lightgreen;
-    z-index:2;
+    z-index:18;
 }
-*/
+
+/******************************************************************/
 </style>
