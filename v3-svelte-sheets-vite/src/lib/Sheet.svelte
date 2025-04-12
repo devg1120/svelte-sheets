@@ -1001,7 +1001,7 @@ for (let row of table.rows) {
     overflow: hidden;
     position: sticky;
     top: 0;
-    z-index: 1;
+    z-index: 9;
   }
 
   td {
@@ -1075,7 +1075,8 @@ for (let row of table.rows) {
     overflow: hidden;
     position: sticky;
     top: 0px;
-    z-index: 1000;
+    left:0px;
+    z-index: 10;
     height: 27px;
   }
   tbody > tr > th {
@@ -1173,10 +1174,12 @@ for (let row of table.rows) {
   .bottom-select,
   .col-line {
     border-bottom: 2px solid #1e90ff;
+    z-index: 1;
   }
   .left-select,
   .right-select {
     border-left: 2px solid #1e90ff;
+    z-index: 1;
   }
 
   .top-extend,
