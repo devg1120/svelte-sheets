@@ -1,0 +1,414 @@
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Wolf-Table</title>
+    <style>
+* {
+        margin: 0px;
+        padding: 0;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      .heading {
+        display: flex;
+        background-color: #232f3e;
+        box-shadow: 0px 1px 2px #232f3e;
+      }
+
+      h1 {
+        color: coral;
+        font-weight: bold;
+
+        background: transparent;
+        padding: 7px;
+      }
+
+      .outer-wrapper {
+        margin: 10px;
+        margin-left: 20px;
+        margin-right: 20px;
+        border: 1px solid black;
+        border-radius: 4px;
+        box-shadow: 0px 0px 3px rgba(0, 0, 0, 0.9);
+        max-width: fit-content;
+        max-height: fit-content;
+      }
+
+      .table-wrapper {
+        overflow-y: auto;
+        overflow-x: auto;
+        max-height: 200px;
+        /* Optional limit */
+
+        position: relative;
+        background: #ffffff;
+      }
+
+      table {
+        /*min-width: max-content;*/
+
+        border-collapse: separate;
+        border-spacing: 0px;
+      }
+
+      table th {
+        position: sticky;
+        top: 0;
+        background-color: #133b5c;
+        /* Dark header background */
+        color: white;
+        text-align: center;
+        font-weight: bold;
+        font-size: 18px;
+        padding: 12px 10px;
+        border-bottom: 2px solid #0f2c48;
+        z-index: 3;
+        /* Ensures headers stay on top */
+      }
+
+      table thead:nth-child(2) th {
+        top: 42px;
+      }
+
+      table th,
+      table td {
+        padding: 15px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        white-space: nowrap;
+        /* Prevent text from wrapping */
+      }
+
+      table td {
+        text-align: left;
+
+        font-size: 15px;
+        border: 1px solid rgb(177, 177, 177);
+        padding-left: 20px;
+      }
+
+      /* Keep the first three columns sticky while scrolling horizontally */
+      table th:nth-child(1),
+      table td:nth-child(1) {
+        width: 100px;
+        position: sticky;
+        left: 0;
+        background-color: #ffebb5;
+        color: #333;
+        font-weight: bold;
+        border-right: 2px solid #bbb;
+      }
+
+      table th:nth-child(2),
+      table td:nth-child(2) {
+        position: sticky;
+        left: 150px;
+        /* Adjust based on the width of the first column */
+        background-color: #ffebb5;
+        color: #333;
+        font-weight: bold;
+        border-right: 2px solid #bbb;
+      }
+
+      table th:nth-child(3),
+      table td:nth-child(3) {
+        position: sticky;
+        left: 300px;
+        /* Adjust based on the combined width of the first two columns */
+        background-color: #ffebb5;
+        color: #333;
+        font-weight: bold;
+        border-right: 2px solid #bbb;
+      }
+
+      table td:nth-child(1),
+      table td:nth-child(2),
+      table td:nth-child(3) {
+        z-index: 2;
+      }
+
+      table th:nth-child(2),
+      table td:nth-child(2) {
+        left: 99px;
+        /* Adjust based on column width */
+      }
+
+      table th:nth-child(3),
+      table td:nth-child(3) {
+        left: 208px;
+        /* Adjust based on column width */
+      }
+      
+      table th:nth-child(1),
+      table th:nth-child(2),
+      table th:nth-child(3) {
+        z-index: 5;
+      }
+
+    </style>
+  </head>
+ <body>
+<div class="container-fluid">
+      <div class="outer-wrapper">
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <th rowspan="2">Number</th>
+              <th rowspan="2">Category</th>
+              <th rowspan="2">Status</th>
+              <th colspan="2" class="group-header">01-Feb</th>
+              <th colspan="2" class="group-header">02-Feb</th>
+              <th colspan="2" class="group-header">03-Feb</th>
+              <th colspan="2" class="group-header">04-Feb</th>
+              <th colspan="2" class="group-header">05-Feb</th>
+              <th colspan="2" class="group-header">06-Feb</th>
+              <th colspan="2" class="group-header">07-Feb</th>
+              <th colspan="2" class="group-header">08-Feb</th>
+              <th colspan="2" class="group-header">09-Feb</th>
+              <th colspan="2" class="group-header">10-Feb</th>
+              <th colspan="2" class="group-header">11-Feb</th>
+              <th colspan="2" class="group-header">12-Feb</th>
+              <th colspan="2" class="group-header">13-Feb</th>
+              <th colspan="2" class="group-header">14-Feb</th>
+              <th colspan="2" class="group-header">15-Feb</th>
+              <th colspan="2" class="group-header">16-Feb</th>
+              <th colspan="2" class="group-header">17-Feb</th>
+              <th colspan="2" class="group-header">18-Feb</th>
+              <th colspan="2" class="group-header">19-Feb</th>
+              <th colspan="2" class="group-header">20-Feb</th>
+              <th colspan="2" class="group-header">21-Feb</th>
+              <th colspan="2" class="group-header">22-Feb</th>
+              <th colspan="2" class="group-header">23-Feb</th>
+              <th colspan="2" class="group-header">24-Feb</th>
+              <th colspan="2" class="group-header">25-Feb</th>
+              <th colspan="2" class="group-header">26-Feb</th>
+              <th colspan="2" class="group-header">27-Feb</th>
+              <th colspan="2" class="group-header">28-Feb</th>
+            </thead>
+            <thead>
+           <th></th>
+           <th></th>
+           <th></th>
+           <th class="sub-header">start</th>
+           <th class="sub-header">end</th>
+           <th class="sub-header">start</th>
+           <th class="sub-header">end</th>
+           <th class="sub-header">start</th>
+           <th class="sub-header">end</th>
+           <th class="sub-header">start</th>
+           <th class="sub-header">end</th>
+           <th class="sub-header">start</th>
+           <th class="sub-header">end</th>
+           <th class="sub-header">start</th>
+           <th class="sub-header">end</th>
+           <th class="sub-header">start</th>
+           <th class="sub-header">end</th>
+           <th class="sub-header">start</th>
+    <th class="sub-header">end</th>
+           <th class="sub-header">start</th>
+    <th class="sub-header">end</th>
+           <th class="sub-header">start</th>
+    <th class="sub-header">end</th>
+           <th class="sub-header">start</th>
+    <th class="sub-header">end</th>
+           <th class="sub-header">start</th>
+    <th class="sub-header">end</th>
+           <th class="sub-header">start</th>
+    <th class="sub-header">end</th>
+           <th class="sub-header">start</th>
+    <th class="sub-header">end</th>
+           <th class="sub-header">start</th>
+    <th class="sub-header">end</th>
+           <th class="sub-header">start</th>
+    <th class="sub-header">end</th>
+           <th class="sub-header">start</th>
+    <th class="sub-header">end</th>
+           <th class="sub-header">start</th>
+    <th class="sub-header">end</th>
+           <th class="sub-header">start</th>
+    <th class="sub-header">end</th>
+           <th class="sub-header">start</th>
+    <th class="sub-header">end</th>
+           <th class="sub-header">start</th>
+    <th class="sub-header">end</th>
+           <th class="sub-header">start</th>
+    <th class="sub-header">end</th>
+           <th class="sub-header">start</th>
+    <th class="sub-header">end</th>
+           <th class="sub-header">start</th>
+    <th class="sub-header">end</th>
+           <th class="sub-header">start</th>
+    <th class="sub-header">end</th>
+           <th class="sub-header">start</th>
+    <th class="sub-header">end</th>
+           <th class="sub-header">start</th>
+           <th class="sub-header">end</th>
+           <th class="sub-header">start</th>
+           <th class="sub-header">end</th>
+           
+
+            <tbody>
+              <tr>
+                <td class="blue">302</td>
+                <td class="blue">Medium</td>
+                <td class="blue">Not stated</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td
+                  colspan="12"
+                  style="background-color: #778899; position: relative"
+                >
+                  <div class="tooltip-wrapper">
+                    <span> Laura Robinson </span>
+                    <div class="hover-info">Guest</div>
+                  </div>
+                </td>
+                <td
+                  colspan="10"
+                  style="background-color: #d8bfd8; position: relative"
+                >
+                  <div class="tooltip-wrapper">
+                    <span> George Davis </span>
+                    <div class="hover-info">Member</div>
+                  </div>
+                </td>
+                <td
+                  colspan="12"
+                  style="background-color: #20b2aa; position: relative"
+                >
+                  <div class="tooltip-wrapper">
+                    <span> Bob Jackson </span>
+                    <div class="hover-info">Guest</div>
+                  </div>
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td class="blue">303</td>
+                <td class="blue">Small</td>
+                <td class="blue">Progress</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td
+                  colspan="12"
+                  style="background-color: #ffcccb; position: relative"
+                >
+                  <div class="tooltip-wrapper">
+                    <span> Nina Moore </span>
+                    <div class="hover-info">Member</div>
+                  </div>
+                </td>
+                <td
+                  colspan="4"
+                  style="background-color: #20b20a; position: relative"
+                >
+                  <div class="tooltip-wrapper">
+                    <span> Fiona Anderson </span>
+                    <div class="hover-info">Guest</div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td class="blue">302</td>
+                <td class="blue">Medium</td>
+                <td class="blue">Done</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td
+                  colspan="12"
+                  style="background-color: #778899; position: relative"
+                >
+                  <div class="tooltip-wrapper">
+                    <span> Laura Robinson </span>
+                    <div class="hover-info">Guest</div>
+                  </div>
+                </td>
+                <td
+                  colspan="10"
+                  style="background-color: #d8bfd8; position: relative"
+                >
+                  <div class="tooltip-wrapper">
+                    <span> George Davis </span>
+                    <div class="hover-info">Member</div>
+                  </div>
+                </td>
+                <td
+                  colspan="12"
+                  style="background-color: #20b2aa; position: relative"
+                >
+                  <div class="tooltip-wrapper">
+                    <span> Bob Jackson </span>
+                    <div class="hover-info">Guest</div>
+                  </div>
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+</body>
+</html>
+
+

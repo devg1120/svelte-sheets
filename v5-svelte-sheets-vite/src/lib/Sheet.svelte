@@ -1001,7 +1001,7 @@ for (let row of table.rows) {
     overflow: hidden;
     position: sticky;
     top: 0;
-    z-index: 1;
+    z-index: 2;
   }
 
   td {
@@ -1075,7 +1075,7 @@ for (let row of table.rows) {
     overflow: hidden;
     position: sticky;
     top: 0px;
-    z-index: 1000;
+    z-index: 1;
     height: 27px;
   }
   tbody > tr > th {
@@ -1203,4 +1203,58 @@ for (let row of table.rows) {
   }
 
 
+.sticky_table  tbody > tr:nth-child(1){
+    position: sticky;  
+    top: 28px;
+    background: green;
+    z-index: 2; 
+}
+
+.sticky_table tbody > tr:nth-child(2){
+    position: -webkit-sticky;
+    position: sticky;
+    top: 52px;
+    background: red;
+    z-index: 1;
+}
+
+.sticky_table tbody >  tr:nth-child(3){
+    position: -webkit-sticky;
+    position: sticky;
+    top: 76px;
+    background: blue;
+    z-index: 1;
+}
+
+.sticky_table  th:nth-child(1),
+.sticky_table  td:nth-child(1) {
+    position: sticky;
+    left: 0;
+    width: 50px;
+    min-width: 50px;
+}
+
+.sticky_table  th:nth-child(2),
+.sticky_table  td:nth-child(2) {
+    position: sticky;
+    /* 1st cell left/right padding + 1st cell width + 1st cell left/right border width */
+    /* 0 + 5 + 150 + 5 + 1 = 161 */
+    left: 51px;
+    width: 100px;
+    min-width: 100px;
+    background: lightblue;
+    z-index:10;
+}
+
+.sticky_table  th:nth-child(3),
+.sticky_table  td:nth-child(3) {
+    position: sticky;
+    /* 1st cell left/right padding + 1st cell width + 1st cell left/right border width */
+    /* 0 + 5 + 150 + 5 + 1 = 161 */
+    left: 200px;
+    width: 100px;
+    min-width: 100px;
+    background: lightgreen;
+    z-index:10;
+}
 </style>
