@@ -57,6 +57,7 @@
   let ignoreEvents = false;
   let ignoreHistory = false;
   let edition = null;
+  let canvas_cell = null;
   let hashString = null;
   let resizing = null;
   let dragging = null;
@@ -95,6 +96,8 @@
   let right = 0;
   let average_height;
   let average_width;
+
+  canvas_cell = [encode({ c:5 , r: 3 }), encode({ c: 7, r: 5 })];  // F4:H6
 
   $: xrows = endY > data.length ? Array.from({ length: endY - data.length }) : [];
 
@@ -153,6 +156,10 @@
       selected = next_cell;
       //edition = null;
       edition = next_cell;
+
+      console.log(String(edition));
+      console.log(String(canvas_cell));
+
 
       let table = document.getElementById('sheet_table');
 
@@ -248,6 +255,38 @@ for (let row of table.rows) {
     average_width = (left + content_width) / endX;
     right = remains * average_width;
     width_map.length = columns.length;
+
+
+      const canvas001 = document.getElementById("canvas001");
+      //console.log("canvas", canvas001);
+      if (canvas001 != null) {
+         
+         const ctx = canvas001.getContext("2d");
+	 console.log("getContext OK");
+	 ctx.fillStyle = "green";
+         ctx.fillRect(100, 100, 100, 100);
+
+          ctx.fillStyle = "rgb(200 0 0)";
+          ctx.fillRect(10, 10, 50, 50);
+
+          ctx.fillStyle = "rgb(0 0 200 / 50%)";
+          ctx.fillRect(30, 30, 50, 50);
+	 
+      }
+
+       let svg1=document.getElementById('svg1');
+       let line1=document.createElementNS('http://www.w3.org/2000/svg','line');
+       line1.setAttribute('x1',-30);
+       line1.setAttribute('y1',-30);
+       line1.setAttribute('x2',30);
+       line1.setAttribute('y2',30);
+       line1.setAttribute('stroke','red');
+       svg1.appendChild(line1);
+       const polygon = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+       const x1=40, y1=0, x2=50, y2=50, x3=90, y3=0;
+       polygon.setAttribute('points',x1+","+y1+" "+x2+","+y2+" "+x3+","+y3); 
+       svg1.appendChild(polygon);
+
   }
 
   // $: scrollLeft = viewport?.scrollLeft;
@@ -915,6 +954,19 @@ for (let row of table.rows) {
                         x.i
                       )}px; height: ${getRowHeight(r.i)}px; min-height: 22px;`}
                     />
+
+		  <!--
+                  {:else if x.i == 5 && r.i == 3}
+                    <canvas id="canvas001" width="200" height="200">
+                    </canvas>
+                     <p>{encode({c:x.i, r:r.i})}</p>
+		  -->
+                  {:else if encode({c:x.i, r:r.i}) == "F4"}
+                    <canvas id="canvas001" width="200" height="200">
+                    </canvas>
+                  {:else if encode({c:x.i, r:r.i}) == "F15"}
+<svg id="svg1" width="200" height="200"  viewBox="-120 -120 240 240" xmlns="http://www.w3.org/2000/svg"> 
+</svg> 
                   {:else}{(r.data && r.data[x.i]) || ''}{/if}
                 </td>
               {/each}
@@ -967,11 +1019,11 @@ for (let row of table.rows) {
 
   .sticky_table  {
     position: absolute;
-    border-collapse: collapse; 
-    //boz-sizing: content-box;
-
-    //border-collapse: sepalate; 
+    //border-collapse: collapse; 
+    border-collapse: sepalate; 
     border-spacing: 0px;
+
+    //boz-sizing: content-box;
 
     table-layout: fixed;
     white-space: nowrap;
@@ -1186,11 +1238,19 @@ for (let row of table.rows) {
 .sticky_table tbody >  tr:nth-child(3){
     position: -webkit-sticky;
     position: sticky;
-    top: 76px;
+    top: 75px;
     background: blue;
     z-index: 20;
 }
-
+/*
+.sticky_table tbody >  tr:nth-child(3) > td{
+    position: sticky;
+    top: 76px;
+    background: yellow;
+    border: 2px solid #000;
+    z-index: 21;
+}
+*/
 .sticky_table  td:nth-child(2) {
     position: sticky;
     left: 50px;

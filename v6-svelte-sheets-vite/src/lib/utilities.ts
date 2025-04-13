@@ -67,6 +67,7 @@ export const computeStyles = (c, r, row, style, options, value, nextValue) => {
   `;
   }
 
+  /*
   if (c > 1 && c < 6 && r > 10 && r < 14) {
     return `text-align: ${c.align || 'center'}; 
   height: ${getRowHeight(row)}px;
@@ -75,6 +76,8 @@ export const computeStyles = (c, r, row, style, options, value, nextValue) => {
   border: 3px blue  double;
   `;
   }
+  */
+
   /*
    *      2 3 4 5
    *  11
@@ -82,7 +85,7 @@ export const computeStyles = (c, r, row, style, options, value, nextValue) => {
    *  13
    *
    */
-  /*
+
   if ( c > 1 && c < 6 && r > 10 && r < 14)  {
     let _style =  `text-align: ${c.align || "center"}; 
     height: ${getRowHeight(row)}px;
@@ -138,7 +141,7 @@ export const computeStyles = (c, r, row, style, options, value, nextValue) => {
     }
     return _style;
   }
-*/
+
   return `text-align: ${c.align || 'center'}; 
   height: ${getRowHeight(row)}px;
   overflow: ${nextValue && nextValue.length ? 'hidden' : 'visible'};
