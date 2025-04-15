@@ -5,7 +5,7 @@
   import { draggable } from './actions/draggable';
   import type { Config } from './defaultconfig';
   import { defaultconfig } from './defaultconfig';
-//  import hotkeys from 'hotkeys-js';
+  import hotkeys from 'hotkeys-js';
   import Menu from './Menu.svelte';
   import {
     clearSelection,
@@ -57,7 +57,6 @@
   let ignoreEvents = false;
   let ignoreHistory = false;
   let edition = null;
-  let canvas_cell = null;
   let hashString = null;
   let resizing = null;
   let dragging = null;
@@ -96,8 +95,6 @@
   let right = 0;
   let average_height;
   let average_width;
-
-  canvas_cell = [encode({ c:5 , r: 3 }), encode({ c: 7, r: 5 })];  // F4:H6
 
   $: xrows = endY > data.length ? Array.from({ length: endY - data.length }) : [];
 
@@ -156,10 +153,6 @@
       selected = next_cell;
       //edition = null;
       edition = next_cell;
-
-      console.log(String(edition));
-      console.log(String(canvas_cell));
-
 
       let table = document.getElementById('sheet_table');
 
@@ -255,38 +248,6 @@ for (let row of table.rows) {
     average_width = (left + content_width) / endX;
     right = remains * average_width;
     width_map.length = columns.length;
-
-
-      const canvas001 = document.getElementById("canvas001");
-      //console.log("canvas", canvas001);
-      if (canvas001 != null) {
-         
-         const ctx = canvas001.getContext("2d");
-	 console.log("getContext OK");
-	 ctx.fillStyle = "green";
-         ctx.fillRect(100, 100, 100, 100);
-
-          ctx.fillStyle = "rgb(200 0 0)";
-          ctx.fillRect(10, 10, 50, 50);
-
-          ctx.fillStyle = "rgb(0 0 200 / 50%)";
-          ctx.fillRect(30, 30, 50, 50);
-	 
-      }
-
-       let svg1=document.getElementById('svg1');
-       let line1=document.createElementNS('http://www.w3.org/2000/svg','line');
-       line1.setAttribute('x1',-30);
-       line1.setAttribute('y1',-30);
-       line1.setAttribute('x2',30);
-       line1.setAttribute('y2',30);
-       line1.setAttribute('stroke','red');
-       svg1.appendChild(line1);
-       const polygon = document.createElementNS('http://www.w3.org/2000/svg','polygon');
-       const x1=40, y1=0, x2=50, y2=50, x3=90, y3=0;
-       polygon.setAttribute('points',x1+","+y1+" "+x2+","+y2+" "+x3+","+y3); 
-       svg1.appendChild(polygon);
-
   }
 
   // $: scrollLeft = viewport?.scrollLeft;
@@ -472,7 +433,7 @@ for (let row of table.rows) {
     // on keyup just reinitialize everything
     keypressed[e.keyCode] = false;
   }
-/*
+
   hotkeys('ctrl+z, command+z', function (e) {
     e.preventDefault();
     cmdz = true;
@@ -510,7 +471,7 @@ for (let row of table.rows) {
     if (!clipboard) return;
     data = pasteSelection(data, JSON.parse(clipboard), selected);
   });
-*/
+
   function onKeyDown(e) {
     keypressed[e.keyCode] = true;
     if (!!edition) {
@@ -954,19 +915,6 @@ for (let row of table.rows) {
                         x.i
                       )}px; height: ${getRowHeight(r.i)}px; min-height: 22px;`}
                     />
-
-		  <!--
-                  {:else if x.i == 5 && r.i == 3}
-                    <canvas id="canvas001" width="200" height="200">
-                    </canvas>
-                     <p>{encode({c:x.i, r:r.i})}</p>
-		  -->
-                  {:else if encode({c:x.i, r:r.i}) == "F4"}
-                    <canvas id="canvas001" width="200" height="200">
-                    </canvas>
-                  {:else if encode({c:x.i, r:r.i}) == "F15"}
-<svg id="svg1" width="200" height="200"  viewBox="-120 -120 240 240" xmlns="http://www.w3.org/2000/svg"> 
-</svg> 
                   {:else}{(r.data && r.data[x.i]) || ''}{/if}
                 </td>
               {/each}
@@ -982,12 +930,10 @@ for (let row of table.rows) {
   *,
   ::before,
   ::after {
-    box-sizing: border-box; 
-    /* box-sizing: content-box;*/
-    border-width: 0px;
+    box-sizing: border-box;
+    border-width: 0;
     border-style: solid;
     border-color: #e0e0e0;
-
   }
 
   :root {
@@ -1010,103 +956,129 @@ for (let row of table.rows) {
   .sheet_container {
     display: block;
     padding-right: 2px;
-    //box-sizing: border-box;
+    box-sizing: border-box;
     overscroll-behavior: contain;
     outline: none;
     position: relative;
     user-select: none;
   }
-
-  .sticky_table  {
+  table {
     position: absolute;
-    //border-collapse: collapse; 
-    border-collapse: sepalate; 
-    border-spacing: 0px;
-
-    //boz-sizing: content-box;
-
+    /* border-collapse: separate;*/
+    border-collapse: collapse;
     table-layout: fixed;
     white-space: nowrap;
     empty-cells: show;
     border: 0px;
     background-color: #fff;
     width: 0;
-    //border-top: 1px solid transparent;
-    //border-left: 1px solid transparent;
+    border-top: 1px solid transparent;
+    border-left: 1px solid transparent;
     border-right: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
     text-indent: 0;
   }
 
-  .sticky_table thead > tr > th {
-    background-color: #f3f3f3;
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    border-left: 1px solid #ccc;
-    border-right: 1px solid #ccc;
-    padding: 2px;
-    cursor: s-resize;
-    //box-sizing: border-box;
-    overflow: hidden;
-    position: sticky;
-    top: 0px;
-    left:0px;
-    z-index: 10;
-    height: 27px;
-  }
+  /* tr.selected {
+    background-color: #b8e7e3;
+  } */
 
-  .sticky_table thead > tr > td.selected {
+  thead > tr > td.selected {
     background-color: #dcdcdc;
     color: teal;
   }
-
-
-  .sticky_table  thead > tr > td {
+  /* thead > tr > th,*/
+  thead > tr > td {
     background-color: #f3f3f3;
+    background-color: yellow;
     border-top: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
     border-left: 1px solid #ccc;
     border-right: 1px solid #ccc;
     padding: 2px;
     cursor: s-resize;
-    //box-sizing: border-box;
+    box-sizing: border-box;
     overflow: hidden;
     position: sticky;
     top: 0;
-    z-index: 9;
-   
+    z-index: 2;
   }
 
-  .sticky_table td {
+  td {
     outline: none;
     cursor: default;
     line-height: 14px;
     font-size: 14px;
     border-top: 1px solid #ccc;
     border-left: 1px solid #ccc;
-    //border-right: 1px solid transparent;
-    //border-bottom: 1px solid transparent;
+    border-right: 1px solid transparent;
+    border-bottom: 1px solid transparent;
   }
-
-  .sticky_table tbody > tr > td {
+  tbody > tr > td {
     padding: 4px;
     white-space: nowrap;
-    //box-sizing: border-box;
+    box-sizing: border-box;
     line-height: 1em;
     text-align: end;
     cursor: cell;
     border-top: 1px solid #ccc; /* GUSA */
     border-left: 1px solid #ccc;
-    //border-right: 0px solid transparent;
-    //border-bottom: 0px solid transparent;
+    border-right: 0px solid transparent;
+    border-bottom: 0px solid transparent;
   }
-
-  .sticky_table tbody > tr > td.selected {
+  tbody > tr > td.selected {
     background-color: #ddd;
     transition: all 0.1s linear;
   }
 
-  .sticky_table tbody > tr > th {
+  /*
+  tbody > tr > th,
+  thead > tr > th {
+    position: sticky;
+    left: 0;
+    cursor: e-resize;
+    top: auto;
+    background: #f3f3f3;
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    z-index: 10;
+    font-weight: normal;
+    height: 27px;
+  }
+*/
+  /*
+  thead > tr > th {
+    position: sticky;
+    left: 0;
+    cursor: e-resize;
+    top: auto;
+    background: #f3f3f3;
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    z-index: 2;
+    font-weight: normal;
+    height: 27px;
+  }
+*/
+  thead > tr > th {
+    background-color: #f3f3f3;
+    background-color: pink;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+    padding: 2px;
+    cursor: s-resize;
+    box-sizing: border-box;
+    overflow: hidden;
+    position: sticky;
+    top: 0px;
+    z-index: 1;
+    height: 27px;
+  }
+  tbody > tr > th {
     position: sticky;
     left: 0;
     cursor: e-resize;
@@ -1126,11 +1098,31 @@ for (let row of table.rows) {
     text-align: center;
   } */
 
-  .sticky_table tbody > tr > th.selected {
+  tbody > tr > th.selected {
     background-color: #dcdcdc !important;
     color: teal;
   }
 
+  table,
+  table th,
+  table td {
+    /* GUSA */
+    border-spacing: 0px;
+  }
+/*
+.sticky_table  tr:nth-child(1){
+    position: -webkit-sticky;
+    position: sticky;
+    top: 24px;
+    z-index: 100;
+}
+.sticky_table  tr:nth-child(2){
+    position: -webkit-sticky;
+    position: sticky;
+    top: 48px;
+    z-index: 100;
+}
+*/
   div.col-resize {
     position: absolute;
     top: 0;
@@ -1181,12 +1173,10 @@ for (let row of table.rows) {
   .bottom-select,
   .col-line {
     border-bottom: 2px solid #1e90ff;
-    z-index: 1;
   }
   .left-select,
   .right-select {
     border-left: 2px solid #1e90ff;
-    z-index: 1;
   }
 
   .top-extend,
@@ -1212,19 +1202,12 @@ for (let row of table.rows) {
     display: none;
   }
 
-/******************************************************************/
-
-.sticky_table  thead > tr:nth-child(1){
-    position: sticky;  
-    top: 0px;
-    z-index: 20; 
-}
 
 .sticky_table  tbody > tr:nth-child(1){
     position: sticky;  
     top: 28px;
     background: green;
-    z-index: 20; 
+    z-index: 2; 
 }
 
 .sticky_table tbody > tr:nth-child(2){
@@ -1232,43 +1215,46 @@ for (let row of table.rows) {
     position: sticky;
     top: 52px;
     background: red;
-    z-index: 20;
+    z-index: 1;
 }
 
 .sticky_table tbody >  tr:nth-child(3){
     position: -webkit-sticky;
     position: sticky;
-    top: 75px;
-    background: blue;
-    z-index: 20;
-}
-/*
-.sticky_table tbody >  tr:nth-child(3) > td{
-    position: sticky;
     top: 76px;
-    background: yellow;
-    border: 2px solid #000;
-    z-index: 21;
+    background: blue;
+    z-index: 1;
 }
-*/
+
+.sticky_table  th:nth-child(1),
+.sticky_table  td:nth-child(1) {
+    position: sticky;
+    left: 0;
+    width: 50px;
+    min-width: 50px;
+}
+
+.sticky_table  th:nth-child(2),
 .sticky_table  td:nth-child(2) {
     position: sticky;
-    left: 50px;
+    /* 1st cell left/right padding + 1st cell width + 1st cell left/right border width */
+    /* 0 + 5 + 150 + 5 + 1 = 161 */
+    left: 51px;
     width: 100px;
     min-width: 100px;
     background: lightblue;
-    z-index:18;
+    z-index:10;
 }
 
-
+.sticky_table  th:nth-child(3),
 .sticky_table  td:nth-child(3) {
     position: sticky;
+    /* 1st cell left/right padding + 1st cell width + 1st cell left/right border width */
+    /* 0 + 5 + 150 + 5 + 1 = 161 */
     left: 200px;
     width: 100px;
     min-width: 100px;
     background: lightgreen;
-    z-index:18;
+    z-index:10;
 }
-
-/******************************************************************/
 </style>
