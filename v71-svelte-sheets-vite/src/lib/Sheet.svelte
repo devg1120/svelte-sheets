@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+//  import { run } from 'svelte/legacy';
 
   import { onMount, tick } from 'svelte';
   import * as XLSX from 'xlsx';
@@ -113,14 +113,14 @@
     return { i: i + startX, data: d };
   }));
   let mounted = $state();
-  let top = $state(0);
-  let left = $state(0);
+  //let top = $state(0);  //GS
+  //let left = $state(0); //GS
   let top_buffer = 2500;
   let bottom_buffer = 2500;
   let left_buffer = 2500;
   let right_buffer = 2500;
-  let bottom = $state(0);
-  let right = $state(0);
+  //let bottom = $state(0); //GS
+  //let right = $state(0);  //GS
   let average_height = $state();
   let average_width = $state();
 
@@ -513,6 +513,7 @@ for (let row of table.rows) {
     menuY = e.screenY - 70;
   }
   // square selection
+
   let tops = $state();
   let rights = $state();
   let lefts = $state();
@@ -521,17 +522,108 @@ for (let row of table.rows) {
   let rightextend = $state();
   let leftextend = $state();
   let bottomextend = $state();
-  let colLine = $state();
-  let rowLine = $state();
-  let square = $state();
+
+  let colLine = $state(); //GS
+  let rowLine = $state(); //GS
+  let square = $state(); //GS
+
   let squareX = $state();
   let squareY = $state();
-  let topLeft = $state();
-  let bottomRight = $state();
+  //let topLeft = $state(); //GS
+  //let bottomRight = $state(); //GS
 
-  let selectWidth: number = $state();
-  let selectHeight: number = $state();
+  //let selectWidth: number = $state();  //GS
+  //let selectHeight: number = $state(); //GS
 
+
+  let { top, left, right, bottom, topLeft, bottomRight,  selectWidth, selectHeight } =  $derived.by(() => {
+
+    let top  = 0;
+    let left = 0;
+    let right = 0;
+    let bottom = 0;
+    let topLeft = 0;
+    let bottomRight  =0;
+    //let colLine  = 0;
+    //let rowLine  = 0;
+    //let square   = 0;
+    let selectWidth = 0;
+    let selectHeight = 0;
+
+
+   if (mounted) {
+      let tl = (selected && decode(selected[0])) || { c: 0, r: 0 };
+      let br = (selected && decode(selected[1])) || { c: 0, r: 0 };
+      topLeft = {
+        c: br.c < tl.c ? br.c : tl.c,
+        r: br.r < tl.r ? br.r : tl.r
+      };
+      bottomRight = {
+        c: br.c > tl.c ? br.c + 1 : tl.c + 1,
+        r: br.r > tl.r ? br.r + 1 : tl.r + 1
+      };
+
+      //console.log('topLeft', topLeft);
+      //console.log('bottomRight', bottomRight);
+
+      let tlid = 'td_' + String(topLeft.r) + '_' + String(topLeft.c);
+      let brid = 'td_' + String(bottomRight.r) + '_' + String(bottomRight.c);
+
+      let tl_ele = document.querySelector('#' + tlid);
+      let br_ele = document.querySelector('#' + brid);
+
+      //let top ;
+      //let left ;
+      //let right ;
+      //let bottom ;
+      //let selectWidth ;
+      //let selectHeight ;
+
+      if (tl_ele != null && br_ele != null) {
+        //console.dir(tl_ele);
+        //console.log('clientHeight:', tl_ele.clientHeight);
+        //console.log('clientWidth :', tl_ele.clientWidth);
+        //console.log('clientLeft  :', tl_ele.clientLeft);
+        //console.log('clientTop   :', tl_ele.clientTop);
+
+        //console.log('offsetHeight:', tl_ele.offsetHeight);
+        //console.log('offsetWidth :', tl_ele.offsetWidth);
+        //console.log('offsetLeft  :', tl_ele.offsetLeft);
+        //console.log('offsetTop   :', tl_ele.offsetTop);
+
+        //console.log('top', top);
+        //console.log('left', left);
+        //console.log('right', right);
+        //console.log('bottom', bottom);
+
+        //top = tl_ele.offsetTop;
+        //left = tl_ele.offsetLeft;
+        //right = left + tl_ele.clientWidth;
+        //bottom = top + tl_ele.clientHeight;
+
+        top = tl_ele.offsetTop;
+        left = tl_ele.offsetLeft;
+        right = br_ele.offsetLeft;
+        bottom = br_ele.offsetTop;
+/*
+        tops.style = `width: ${right - left}px; left: ${left}px; top: ${top}px`;
+        rights.style = `height: ${bottom - top}px; left: ${right}px; top: ${top}px`;
+        bottoms.style = `width: ${right - left}px; left: ${left}px; top: ${bottom}px`;
+        lefts.style = `height: ${bottom - top}px; left: ${left}px; top: ${top}px`;
+        colLine.style = `width: ${right - left}px; left: ${left}px; top: 28px;`;
+        rowLine.style = `height: ${bottom - top}px; left: 51px; top: ${top}px`;
+        square.style = `left:${right}px; top:${bottom}px`;
+*/
+        selectWidth = right - left;
+        selectHeight = bottom - top;
+      }
+     return { top, left, right, bottom, topLeft, bottomRight,  selectWidth, selectHeight } ;
+    } else {
+     return { top, left, right, bottom, topLeft, bottomRight,  selectWidth, selectHeight } ;
+
+    }
+   });
+ 
 
   // history logic
 
@@ -555,7 +647,7 @@ for (let row of table.rows) {
     ...(options || {})
   });
   // initialize and refactor data
-  run(() => {
+  $effect(() => {
     (() => {
       if (data[0]) {
         if (!Array.isArray(data[0])) {
@@ -595,7 +687,7 @@ for (let row of table.rows) {
       }
     })();
   });
-  run(() => {
+  $effect(() => {
     (function scrollY() {
       if (!scrollTop || !rowElements) return;
 
@@ -629,7 +721,7 @@ for (let row of table.rows) {
     })();
   });
   //let xrows = $derived(endY > data.length ? Array.from({ length: endY - data.length }) : []);
-  run(() => {
+  $effect(() => {
     (function scrollX() {
       if (!scrollLeft || !colElements) return;
       // if (!scrollLeft) ;
@@ -667,17 +759,20 @@ for (let row of table.rows) {
   
   
   // whenever `items` changes, invalidate the current heightmap
-  run(() => {
+  $effect(() => {
     if (mounted) refresh(data, viewport_height, viewport_width);
   });
-  run(() => {
+
+
+  $effect(() => {
     try {
       currentValue = data[decoded[0].r][decoded[0].c];
     } catch (e) {
       currentValue = '';
     }
   });
-  run(() => {
+
+  $effect(() => {
     if (extension && extended) {
       let tl = (selected && decode(extended[0])) || { c: 0, r: 0 };
       let br = (selected && decode(extended[1])) || { c: 0, r: 0 };
@@ -716,6 +811,69 @@ for (let row of table.rows) {
       leftextend.style = `height: ${bottom - top}px; left: ${left}px; top: ${top}px`;
     }
   });
+
+  $effect(() => {
+    if (mounted) {
+      let tl = (selected && decode(selected[0])) || { c: 0, r: 0 };
+      let br = (selected && decode(selected[1])) || { c: 0, r: 0 };
+      let topLeft = {
+        c: br.c < tl.c ? br.c : tl.c,
+        r: br.r < tl.r ? br.r : tl.r
+      };
+      let bottomRight = {
+        c: br.c > tl.c ? br.c + 1 : tl.c + 1,
+        r: br.r > tl.r ? br.r + 1 : tl.r + 1
+      };
+
+      //console.log('topLeft', topLeft);
+      //console.log('bottomRight', bottomRight);
+
+      let tlid = 'td_' + String(topLeft.r) + '_' + String(topLeft.c);
+      let brid = 'td_' + String(bottomRight.r) + '_' + String(bottomRight.c);
+
+      let tl_ele = document.querySelector('#' + tlid);
+      let br_ele = document.querySelector('#' + brid);
+
+      if (tl_ele != null && br_ele != null) {
+        //console.dir(tl_ele);
+        //console.log('clientHeight:', tl_ele.clientHeight);
+        //console.log('clientWidth :', tl_ele.clientWidth);
+        //console.log('clientLeft  :', tl_ele.clientLeft);
+        //console.log('clientTop   :', tl_ele.clientTop);
+
+        //console.log('offsetHeight:', tl_ele.offsetHeight);
+        //console.log('offsetWidth :', tl_ele.offsetWidth);
+        //console.log('offsetLeft  :', tl_ele.offsetLeft);
+        //console.log('offsetTop   :', tl_ele.offsetTop);
+
+        //console.log('top', top);
+        //console.log('left', left);
+        //console.log('right', right);
+        //console.log('bottom', bottom);
+
+        //top = tl_ele.offsetTop;
+        //left = tl_ele.offsetLeft;
+        //right = left + tl_ele.clientWidth;
+        //bottom = top + tl_ele.clientHeight;
+
+        let top = tl_ele.offsetTop;
+        let left = tl_ele.offsetLeft;
+        let right = br_ele.offsetLeft;
+        let bottom = br_ele.offsetTop;
+
+        tops.style = `width: ${right - left}px; left: ${left}px; top: ${top}px`;
+        rights.style = `height: ${bottom - top}px; left: ${right}px; top: ${top}px`;
+        bottoms.style = `width: ${right - left}px; left: ${left}px; top: ${bottom}px`;
+        lefts.style = `height: ${bottom - top}px; left: ${left}px; top: ${top}px`;
+        colLine.style = `width: ${right - left}px; left: ${left}px; top: 28px;`;
+        rowLine.style = `height: ${bottom - top}px; left: 51px; top: ${top}px`;
+        square.style = `left:${right}px; top:${bottom}px`;
+      }
+    }
+  });
+
+  // NOT effect
+/*
   run(() => {
     if (mounted) {
       let tl = (selected && decode(selected[0])) || { c: 0, r: 0 };
@@ -777,6 +935,9 @@ for (let row of table.rows) {
       }
     }
   });
+*/
+
+
 </script>
 
 <div class="sticky_table_wrapper">

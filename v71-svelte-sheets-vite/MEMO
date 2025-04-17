@@ -1,0 +1,36 @@
+
+*****  v7
+
+npx svelte-migrate@latest svelte-4
+npx svelte-migrate@latest svelte-4
+
+
+## +page.svelte 
+
+<!--
+  <Sheet
+    bind:data={sheet.data}
+    columns={sheet.columns}
+    rows={sheet.rows}
+    mergeCells={sheet.mergeCells || {}}
+    options={{ tableHeight: '90vh' }}
+    style={sheet.style || {}}
+    bind:currentValue
+    bind:selected
+  />
+-->
+  <Sheet
+    bind:data={sheet.data}
+    columns={sheet.columns}
+    rows={sheet.rows}
+    mergeCells={sheet.mergeCells || {}}
+    options={{ tableHeight: '90vh' }}
+    style={sheet.style || {}}
+  />
+
+*****  v71
+
+//  import { run } from 'svelte/legacy';
+
+ run()  => $effect $devide.by
+

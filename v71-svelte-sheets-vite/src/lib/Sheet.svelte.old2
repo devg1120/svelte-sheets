@@ -474,15 +474,11 @@ for (let row of table.rows) {
         selected = [s, s];
         break;
       case 'ArrowUp':
-        if (decoded[0].r <= 0) {   // GUSA
-           decoded[0].r = 1;
-        }
         var s = encode({
           c: decoded[0].c,
           r: decoded[0].r - 1
         });
         selected = [s, s];
-        console.log(">", selected);
         break;
       case 'ArrowLeft':
         var s = encode({

@@ -1,52 +1,50 @@
 <script lang="ts">
-  import { run } from 'svelte/legacy';
+  import * as XLSX from "xlsx";
+  import { convert } from "./convert";
 
-  import * as XLSX from 'xlsx';
-  import { convert } from './convert';
-
-  interface Props {
-    sheetNames: any;
-    sheets?: any;
-    active?: number;
-  }
-
-  let { sheetNames = $bindable(), sheets = $bindable([]), active = $bindable(0) }: Props = $props();
+  export let sheetNames;
+  export let sheets = [];
+  export let active = 0;
 
   // declare all possible table object
-  let fileinput: any = $state();
-  let files: any = $state();
+  let fileinput: any;
+  let files: any;
 
+  $: files && files[0] && reader && reader.readAsArrayBuffer(files[0]);
 
-  let reader = $state();
+  let reader;
   if (FileReader != undefined) {
     reader = new FileReader();
     reader.onload = () => {
       sheets = [];
       active = 0;
       const wb = XLSX.read(new Uint8Array(reader.result), {
-        type: 'array',
+        type: "array",
         cellFormula: true,
-        cellStyles: true
+        cellStyles: true,
       });
       sheets = convert(wb);
       sheetNames = sheets.map((s) => s.sheetName);
     };
   }
-  run(() => {
-    files && files[0] && reader && reader.readAsArrayBuffer(files[0]);
-  });
 </script>
 
-<input type="file" class="hidden" name="file" bind:this={fileinput} bind:files />
+<input
+  type="file"
+  class="hidden"
+  name="file"
+  bind:this={fileinput}
+  bind:files
+/>
 
 <div class="flex">
-  <button onclick={(_) => fileinput.click()}>Open XLSX file</button>
+  <button on:click={(_) => fileinput.click()}>Open XLSX file</button>
   {#each sheetNames as sn, i}
     <div
-      onclick={(_) => {
+      on:click={(_) => {
         active = i;
       }}
-      class={'ml-4 cursor-pointer ' + (i == active ? 'active' : '')}
+      class={"ml-4 cursor-pointer " + (i == active ? "active" : "")}
     >
       {sn}
     </div>

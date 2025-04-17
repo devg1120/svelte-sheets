@@ -1,50 +1,34 @@
 <script lang="ts">
-  
-  interface Props {
-    show?: boolean;
-    x: any;
-    y: any;
-    data?: (string | number | boolean)[][];
-    selected: string;
-    copy: (e: any) => void;
-    cut: (e: any) => void;
-    paste: (e: any) => any[][];
-    clear: (e: any) => any[][];
-    // delete is a reserved word...
-    delet: (e: any) => any[][];
-  }
-
-  let {
-    show = false,
-    x,
-    y,
-    data = [],
-    selected,
-    copy,
-    cut,
-    paste,
-    clear,
-    delet
-  }: Props = $props();
+  export let show = false;
+  export let x;
+  export let y;
+  export let data: (string | number | boolean)[][] = [];
+  export let selected: string;
+  export let copy: (e: any) => void;
+  export let cut: (e: any) => void;
+  export let paste: (e: any) => any[][];
+  export let clear: (e: any) => any[][];
+  // delete is a reserved word...
+  export let delet: (e: any) => any[][];
 </script>
 
 <div class="menu" class:hidden={!show} style={`top: ${y}px; left: ${x}px`}>
-  <div class="item flex justify-between" onclick={(e) => cut(e)}>
+  <div class="item flex justify-between" on:click={(e) => cut(e)}>
     <div>Cut</div>
     <div class="disabled">⌘X</div>
   </div>
-  <div class="item flex justify-between" onclick={(e) => copy(e)}>
+  <div class="item flex justify-between" on:click={(e) => copy(e)}>
     <div>Copy</div>
     <div class="disabled">⌘C</div>
   </div>
-  <div class="item flex justify-between" onclick={(e) => paste(e)}>
+  <div class="item flex justify-between" on:click={(e) => paste(e)}>
     <div>Paste</div>
     <div class="disabled">⌘P</div>
   </div>
-  <div class="divider"></div>
+  <div class="divider" />
   <div class="item">Insert</div>
-  <div class="item" onclick={(e) => delet(e)}>Delete</div>
-  <div class="item" onclick={(e) => clear(e)}>Clear contents</div>
+  <div class="item" on:click={(e) => delet(e)}>Delete</div>
+  <div class="item" on:click={(e) => clear(e)}>Clear contents</div>
 </div>
 
 <style>
