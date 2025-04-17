@@ -66,7 +66,6 @@
     bind:selected
   />
 -->
-
 <!--
   <Sheet
     bind:data={sheet.data}
@@ -78,21 +77,18 @@
     bind:currentValue={currentValue}
     bind:selected={selected}
   />
-
 -->
 
   <Sheet
     bind:data={sheet.data}
-    columns={sheet.columns}
-    rows={sheet.rows}
+    bind:columns={sheet.columns}
+    bind:rows={sheet.rows}
     mergeCells={sheet.mergeCells || {}}
     options={{ tableHeight: '90vh' }}
     style={sheet.style || {}}
     bind:currentValue={currentValue}
     bind:selected={selected}
   />
-
-
 
 {/if}
 

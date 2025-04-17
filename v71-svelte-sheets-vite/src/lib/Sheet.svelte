@@ -87,6 +87,7 @@
     endY = $bindable(0),
     endX = $bindable(0)
   }: Props = $props();
+
   // virtual list state
   let height_map = $state([]);
   let width_map = $state([]);
