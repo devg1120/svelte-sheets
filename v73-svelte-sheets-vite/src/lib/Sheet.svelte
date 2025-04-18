@@ -17,7 +17,8 @@
     pasteSelection
   } from './utilities';
 
-
+  import { make_clock } from './clock';
+  import { make_sparks } from './sparks';
 
   const encode = ({ c, r }) => XLSX.utils.encode_cell({ c: Number(c), r: Number(r) });
   const decode = XLSX.utils.decode_cell;
@@ -246,7 +247,18 @@
     right = remains * average_width;
     width_map.length = columns.length;
 
+    canvas_draw();
+    svg_draw();
+    make_clock();
+    make_sparks();
 
+  }
+
+  let scrollLeft = $state();
+  let scrollTop = $state();
+
+
+  function canvas_draw() {
       const canvas001 = document.getElementById("canvas001");
       //console.log("canvas", canvas001);
       if (canvas001 != null) {
@@ -261,26 +273,33 @@
           ctx.fillStyle = "rgb(0 0 200 / 50%)";
           ctx.fillRect(30, 30, 50, 50);
 	 
-      }
+       } else {
+          console.log("canvas_draw  not element");
+       }
 
-       let svg1=document.getElementById('svg1');
-       let line1=document.createElementNS('http://www.w3.org/2000/svg','line');
-       line1.setAttribute('x1',-30);
-       line1.setAttribute('y1',-30);
-       line1.setAttribute('x2',30);
-       line1.setAttribute('y2',30);
-       line1.setAttribute('stroke','red');
-       svg1.appendChild(line1);
-       const polygon = document.createElementNS('http://www.w3.org/2000/svg','polygon');
-       const x1=40, y1=0, x2=50, y2=50, x3=90, y3=0;
-       polygon.setAttribute('points',x1+","+y1+" "+x2+","+y2+" "+x3+","+y3); 
-       svg1.appendChild(polygon);
 
   }
 
-  let scrollLeft = $state();
-  let scrollTop = $state();
+  function svg_draw() {
+       let svg1=document.getElementById('svg1');
+       if (svg1 != null) {
+           let line1=document.createElementNS('http://www.w3.org/2000/svg','line');
+           line1.setAttribute('x1',-30);
+           line1.setAttribute('y1',-30);
+           line1.setAttribute('x2',30);
+           line1.setAttribute('y2',30);
+           line1.setAttribute('stroke','red');
+           svg1.appendChild(line1);
+           const polygon = document.createElementNS('http://www.w3.org/2000/svg','polygon');
+           const x1=40, y1=0, x2=50, y2=50, x3=90, y3=0;
+           polygon.setAttribute('points',x1+","+y1+" "+x2+","+y2+" "+x3+","+y3); 
+           svg1.appendChild(polygon);
+       } else {
+          console.log("svg_draw  not element");
 
+       }
+
+  }
 
   function handle_scroll(e) {
     scrollTop = viewport.scrollTop;
@@ -305,6 +324,13 @@
       // document.addEventListener("touchmove", jexcel.touchEndControls);
       document?.addEventListener('keydown', onKeyDown);
       document?.addEventListener('keyup', onKeyUp);
+
+
+
+
+
+
+
     }
   });
 
@@ -1044,6 +1070,12 @@
                   {:else if encode({c:x.i, r:r.i}) == "F15"}
                      <svg id="svg1" width="200" height="200"  viewBox="-120 -120 240 240" xmlns="http://www.w3.org/2000/svg"> 
                      </svg> 
+                  {:else if encode({c:x.i, r:r.i}) == "F21"}
+                     <div  id="stage-container">
+                     </div>
+                  {:else if encode({c:x.i, r:r.i}) == "F31"}
+                     <div  id="stage-container2">
+                     </div>
                   {:else}
                       {#if r.data && (typeof  r.data[x.i] === 'string') }
                           {#if r.data[x.i].split('\n').length < 2}

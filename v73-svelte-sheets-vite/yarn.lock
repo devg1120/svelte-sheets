@@ -972,6 +972,11 @@ tslib@^2.0.3:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.8.1.tgz#612efe4ed235d567e8aba5f2a5fab70280ade83f"
   integrity sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==
 
+two.js@^0.8.18:
+  version "0.8.18"
+  resolved "https://registry.yarnpkg.com/two.js/-/two.js-0.8.18.tgz#fa47ca2df7842b03cb434fe8bf28ba957a113416"
+  integrity sha512-GU05deoNXd+ycnq14wSm7SUOaGx7EKBW8KT8Xw3jk7ppVlPse2oJVb+p7uCH0CUkUTQcVV3dGQjJrVmPGS6iQw==
+
 typescript@^5.5.0:
   version "5.8.3"
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.8.3.tgz#92f8a3e5e3cf497356f4178c34cd65a7f5e8440e"
