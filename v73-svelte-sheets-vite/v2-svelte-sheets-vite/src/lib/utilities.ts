@@ -1,10 +1,12 @@
-import * as XLSX from 'xlsx';
-import btob from 'b64-to-blob';
+import * as XLSX from "xlsx";
+import btob from "b64-to-blob";
 
 function getRowHeight(row) {
   try {
     const height = Number(
-      typeof row?.height == 'string' ? row?.height?.replace('px', '') : row?.height || 24 // consider adding a config.defaultRowHeight
+      typeof row?.height == "string"
+        ? row?.height?.replace("px", "")
+        : row?.height || 24 // consider adding a config.defaultRowHeight
     );
     return height > 24 ? height : 24;
   } catch (e) {
@@ -19,75 +21,51 @@ export const computeStyles = (c, r, row, style, options, value, nextValue) => {
   //     ? "white-space: pre-wrap;"
   //     : ""
   // }
-
-  if (c == 2 && r == 4) {
-    return `text-align: ${c.align || 'left'  }; 
-  vertical-align: top;
+  if ( c == 1 && r == 1)  {
+  return `text-align: ${c.align || "center"}; 
   height: ${getRowHeight(row)}px;
-  overflow: ${nextValue && nextValue.length ? 'hidden' : 'visible'};
-  ${style[XLSX.utils.encode_cell({ c, r })]};
-  border: 1px red  solid;
-  background-color: lightblue;
-  `;
-  }
-  if (c == 1 && r == 1) {
-    return `text-align: ${c.align || 'center'}; 
-  height: ${getRowHeight(row)}px;
-  overflow: ${nextValue && nextValue.length ? 'hidden' : 'visible'};
+  overflow: ${nextValue && nextValue.length ? "hidden" : "visible"};
   ${style[XLSX.utils.encode_cell({ c, r })]};
   border: 3px red  solid;
   background-color: yellow;
   `;
   }
 
-  if (c == 3 && r == 3) {
-    return `text-align: ${c.align || 'center'}; 
+  if ( c == 3 && r == 3)  {
+  return `text-align: ${c.align || "center"}; 
   height: ${getRowHeight(row)}px;
-  overflow: ${nextValue && nextValue.length ? 'hidden' : 'visible'};
+  overflow: ${nextValue && nextValue.length ? "hidden" : "visible"};
   ${style[XLSX.utils.encode_cell({ c, r })]};
   border: 3px red  double;
   `;
   }
-  if (c == 4 && r == 4) {
-    return `text-align: ${c.align || 'center'}; 
+  if ( c == 4 && r == 4)  {
+  return `text-align: ${c.align || "center"}; 
   height: ${getRowHeight(row)}px;
-  overflow: ${nextValue && nextValue.length ? 'hidden' : 'visible'};
+  overflow: ${nextValue && nextValue.length ? "hidden" : "visible"};
   ${style[XLSX.utils.encode_cell({ c, r })]};
   border-left: 3px green  solid;
   border-right: 3px green  solid;
   `;
   }
 
-  if (c == 2 && r == 16) {
-    return `text-align: ${c.align || 'center'}; 
-  background-color: lightgreen;
-  `;
-  }
-  if (c == 2 && r == 21) {
-    return `text-align: ${c.align || 'center'}; 
-  background-color: pink;
-  `;
-  }
-  if (c > 1 && c < 6 && r > 6 && r < 10) {
-    return `text-align: ${c.align || 'center'}; 
+  if ( c > 1 && c < 6 && r > 6 && r < 10)  {
+  return `text-align: ${c.align || "center"}; 
   height: ${getRowHeight(row)}px;
-  overflow: ${nextValue && nextValue.length ? 'hidden' : 'visible'};
+  overflow: ${nextValue && nextValue.length ? "hidden" : "visible"};
   ${style[XLSX.utils.encode_cell({ c, r })]};
   border: 3px blue  solid;
   `;
   }
 
-  /*
-  if (c > 1 && c < 6 && r > 10 && r < 14) {
-    return `text-align: ${c.align || 'center'}; 
+  if ( c > 1 && c < 6 && r > 10 && r < 14)  {
+  return `text-align: ${c.align || "center"}; 
   height: ${getRowHeight(row)}px;
-  overflow: ${nextValue && nextValue.length ? 'hidden' : 'visible'};
+  overflow: ${nextValue && nextValue.length ? "hidden" : "visible"};
   ${style[XLSX.utils.encode_cell({ c, r })]};
   border: 3px blue  double;
   `;
   }
-  */
-
   /*
    *      2 3 4 5
    *  11
@@ -95,7 +73,7 @@ export const computeStyles = (c, r, row, style, options, value, nextValue) => {
    *  13
    *
    */
-
+/*
   if ( c > 1 && c < 6 && r > 10 && r < 14)  {
     let _style =  `text-align: ${c.align || "center"}; 
     height: ${getRowHeight(row)}px;
@@ -151,10 +129,10 @@ export const computeStyles = (c, r, row, style, options, value, nextValue) => {
     }
     return _style;
   }
-
-  return `text-align: ${c.align || 'center'}; 
+*/
+  return `text-align: ${c.align || "center"}; 
   height: ${getRowHeight(row)}px;
-  overflow: ${nextValue && nextValue.length ? 'hidden' : 'visible'};
+  overflow: ${nextValue && nextValue.length ? "hidden" : "visible"};
   ${style[XLSX.utils.encode_cell({ c, r })]};
   `;
 };
@@ -163,17 +141,21 @@ export function GetCellByAddress(map, c, r) {
   return map[
     XLSX.utils.encode_cell({
       c,
-      r
+      r,
     })
   ];
 }
 
 export function GetColSpan(map, c, r) {
-  return (GetCellByAddress(map, c, r) && GetCellByAddress(map, c, r)[0]) || undefined;
+  return (
+    (GetCellByAddress(map, c, r) && GetCellByAddress(map, c, r)[0]) || undefined
+  );
 }
 
 export function GetRowSpan(map, c, r) {
-  return (GetCellByAddress(map, c, r) && GetCellByAddress(map, c, r)[1]) || undefined;
+  return (
+    (GetCellByAddress(map, c, r) && GetCellByAddress(map, c, r)[1]) || undefined
+  );
 }
 
 export async function download(sheets: any[], fileName: string) {
@@ -186,7 +168,10 @@ export async function download(sheets: any[], fileName: string) {
   XLSX.writeFile(wb, fileName);
 }
 
-export async function upload(sheets: any[], uploadURL: string): Promise<Error[]> {
+export async function upload(
+  sheets: any[],
+  uploadURL: string
+): Promise<Error[]> {
   if (!sheets) return;
   const wb = XLSX.utils.book_new();
   sheets.map((s, i) => {
@@ -194,19 +179,22 @@ export async function upload(sheets: any[], uploadURL: string): Promise<Error[]>
     XLSX.utils.book_append_sheet(wb, ws, s.sheetName);
   });
   const wbout = XLSX.write(wb, {
-    bookType: 'xlsx',
+    bookType: "xlsx",
     bookSST: false,
-    type: 'base64'
+    type: "base64",
   });
   const formData = new FormData();
   formData.append(
-    'file',
-    btob(wbout, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),
-    'test.xlsx'
+    "file",
+    btob(
+      wbout,
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    ),
+    "test.xlsx"
   );
   const req = await fetch(uploadURL, {
-    method: 'POST',
-    body: formData
+    method: "POST",
+    body: formData,
   });
   if (req.status == 400) {
     const res = await req.json(); // res contains the list of errors
@@ -216,33 +204,48 @@ export async function upload(sheets: any[], uploadURL: string): Promise<Error[]>
 }
 
 // Return bottomRight, and topLeft border for one selection
-function getBorder(selection: XLSX.CellAddress[]): { tl: XLSX.CellAddress; br: XLSX.CellAddress } {
+function getBorder(
+  selection: XLSX.CellAddress[]
+): { tl: XLSX.CellAddress; br: XLSX.CellAddress } {
   const br = {
     c: selection[0].c > selection[1].c ? selection[0].c : selection[1].c,
-    r: selection[0].r > selection[1].r ? selection[0].r : selection[1].r
+    r: selection[0].r > selection[1].r ? selection[0].r : selection[1].r,
   };
   const tl = {
     c: selection[0].c < selection[1].c ? selection[0].c : selection[1].c,
-    r: selection[0].r < selection[1].r ? selection[0].r : selection[1].r
+    r: selection[0].r < selection[1].r ? selection[0].r : selection[1].r,
   };
   return { tl, br };
 }
 
-export function removeColumns(selection: XLSX.CellAddress[], data: any[][]): any[][] {
+export function removeColumns(
+  selection: XLSX.CellAddress[],
+  data: any[][]
+): any[][] {
   const { tl, br } = getBorder(selection);
   return data.map((d) => d.filter((_, i) => !(i >= tl.c && i <= br.c)));
 }
 
-export function removeRows(selection: XLSX.CellAddress[], data: any[][]): any[][] {
+export function removeRows(
+  selection: XLSX.CellAddress[],
+  data: any[][]
+): any[][] {
   const { tl, br } = getBorder(selection);
   return data.filter((d, i) => !(i >= tl.c && i <= br.c));
 }
 
 function decode(address: [string, string]): XLSX.CellAddress[] {
-  return [XLSX.utils.decode_cell(address[0]), XLSX.utils.decode_cell(address[1])];
+  return [
+    XLSX.utils.decode_cell(address[0]),
+    XLSX.utils.decode_cell(address[1]),
+  ];
 }
 
-export function pasteSelection(data, pasted: [string, string], selected: [string, string]) {
+export function pasteSelection(
+  data,
+  pasted: [string, string],
+  selected: [string, string]
+) {
   const dpaste = getBorder(decode(pasted));
   const dselect = getBorder(decode(selected));
   const dx = dselect.tl.c - dpaste.tl.c;
@@ -260,12 +263,12 @@ export function pasteSelection(data, pasted: [string, string], selected: [string
 }
 
 export function clearSelection(data, selected: [string, string]) {
-  console.log('clear');
+  console.log("clear");
   const dselect = getBorder(decode(selected));
   for (var r = dselect.tl.r; r <= dselect.br.r; r++) {
     for (var c = dselect.tl.c; r <= dselect.br.c; c++) {
       if (data.length - 1 < r) return;
-      data[r][c] = '';
+      data[r][c] = "";
     }
   }
   return data;
@@ -281,7 +284,7 @@ export function deleteSelection(data, selected: [string, string]) {
   }
   if (dselect.br.r == data.length - 1) {
     // delete columns
-    console.log('delete columns');
+    console.log("delete columns");
     data = data.map((c) =>
       c.filter((v, i) => {
         return i < dselect.tl.c || i > dselect.br.c;
@@ -311,7 +314,7 @@ export function mergeSelectExtends(
       for (var r = sel.tl.r; r <= sel.br.r; r++) {
         // if the cell is outside extended and inside selected erase it
         if (c > ext.br.c || r > ext.br.r) {
-          data[r][c] = '';
+          data[r][c] = "";
         }
       }
     }
@@ -325,7 +328,8 @@ export function mergeSelectExtends(
         const selheight = brsel.r - sel.tl.r;
         if (c < sel.tl.c) {
           // cell is on the left
-          data[r][c] = data[r][sel.br.c - (Math.abs(c - sel.tl.c + 1) % selwidth)];
+          data[r][c] =
+            data[r][sel.br.c - (Math.abs(c - sel.tl.c + 1) % selwidth)];
         }
         if (c > sel.br.c) {
           // cell is on the right
@@ -337,7 +341,8 @@ export function mergeSelectExtends(
         }
         if (r < sel.tl.r) {
           // cell is on top
-          data[r][c] = data[sel.br.r - (Math.abs(r - sel.tl.r + 1) % selheight)][c];
+          data[r][c] =
+            data[sel.br.r - (Math.abs(r - sel.tl.r + 1) % selheight)][c];
         }
         if (r > sel.br.r) {
           // cell is below

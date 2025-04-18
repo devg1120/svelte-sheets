@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { run } from 'svelte/legacy';
+
   import { onMount, tick } from 'svelte';
   import * as XLSX from 'xlsx';
   import { resizable } from './actions';
@@ -17,6 +19,9 @@
     pasteSelection
   } from './utilities';
 
+  //let xcolumns: any[] = $state([]);
+  //let xrows: any[] = $state([]);
+  
 
 
   const encode = ({ c, r }) => XLSX.utils.encode_cell({ c: Number(c), r: Number(r) });
@@ -39,6 +44,12 @@
   let resizing = null;
   let dragging = null;
   let keypressed = $state({});
+
+  // $: ((_) => {
+  //   history = history.slice(0, historyIndex);
+  //   history.push(data);
+  //   historyIndex = history.length;
+  // })();
 
   
   interface Props {
@@ -76,7 +87,6 @@
     endY = $bindable(0),
     endX = $bindable(0)
   }: Props = $props();
-
   // virtual list state
   let height_map = $state([]);
   let width_map = $state([]);
@@ -103,18 +113,21 @@
     return { i: i + startX, data: d };
   }));
   let mounted = $state();
-  //let top = $state(0);  //GS
-  //let left = $state(0); //GS
+  let top = $state(0);
+  let left = $state(0);
   let top_buffer = 2500;
   let bottom_buffer = 2500;
   let left_buffer = 2500;
   let right_buffer = 2500;
-  //let bottom = $state(0); //GS
-  //let right = $state(0);  //GS
+  let bottom = $state(0);
+  let right = $state(0);
   let average_height = $state();
   let average_width = $state();
 
   canvas_cell = [encode({ c:5 , r: 3 }), encode({ c: 7, r: 5 })];  // F4:H6
+
+
+
 
 
   function getColumnsWidth(i: number) {
@@ -140,6 +153,7 @@
 
   export function onInputKeyDown(e, r, c) {
     //console.log("onInputKeyDown:", e.key, r, x)
+    //console.log("selected:", selected)
 
     if (e.key == 'Enter') {
       let r2 = String(parseInt(r.i) + 1);
@@ -150,17 +164,19 @@
       //edition = null;
       edition = next_cell;
 
+      console.log(String(edition));
+      console.log(String(canvas_cell));
 
 
       let table = document.getElementById('sheet_table');
 
       /*
-      for (let row of table.rows) {
-          for(let cell of row.cells){
-             console.log(cell.innerText);
-          }
-      }
-      */
+for (let row of table.rows) {
+    for(let cell of row.cells){
+       console.log(cell.innerText);
+    }
+}
+*/
 
       let element = table.rows[parseInt(r2) + 1].cells[parseInt(c2) + 1];
       let event = new MouseEvent('dblclick', { bubbles: true, cancelable: true });
@@ -174,6 +190,7 @@
         let cell_editor = document.getElementById('cell_editor');
         cell_editor.focus();
         cell_editor.click();
+        console.log('tick');
       }
       next_input_focus();
     }
@@ -252,6 +269,7 @@
       if (canvas001 != null) {
          
          const ctx = canvas001.getContext("2d");
+	 console.log("getContext OK");
 	 ctx.fillStyle = "green";
          ctx.fillRect(100, 100, 100, 100);
 
@@ -278,8 +296,11 @@
 
   }
 
+  // $: scrollLeft = viewport?.scrollLeft;
+  // $: scrollTop = viewport?.scrollTop;
   let scrollLeft = $state();
   let scrollTop = $state();
+
 
 
   function handle_scroll(e) {
@@ -311,6 +332,7 @@
   function onMouseDown(e) {
     // if right click
     if (e.which == 3) return;
+    console.log('mousedown', e.which);
     if (e.target.id == 'square') {
       extension = true;
       selection = false;
@@ -395,7 +417,6 @@
     // on keyup just reinitialize everything
     keypressed[e.keyCode] = false;
   }
-
 /*
   hotkeys('ctrl+z, command+z', function (e) {
     e.preventDefault();
@@ -435,7 +456,6 @@
     data = pasteSelection(data, JSON.parse(clipboard), selected);
   });
 */
-
   function onKeyDown(e) {
     keypressed[e.keyCode] = true;
     if (!!edition) {
@@ -454,15 +474,11 @@
         selected = [s, s];
         break;
       case 'ArrowUp':
-        if (decoded[0].r <= 0) {   // GUSA
-           decoded[0].r = 1;
-        }
         var s = encode({
           c: decoded[0].c,
           r: decoded[0].r - 1
         });
         selected = [s, s];
-        //console.log(">", selected);
         break;
       case 'ArrowLeft':
         var s = encode({
@@ -493,7 +509,6 @@
     menuY = e.screenY - 70;
   }
   // square selection
-
   let tops = $state();
   let rights = $state();
   let lefts = $state();
@@ -502,87 +517,17 @@
   let rightextend = $state();
   let leftextend = $state();
   let bottomextend = $state();
-
-  let colLine = $state(); //GS
-  let rowLine = $state(); //GS
-  let square = $state(); //GS
-
+  let colLine = $state();
+  let rowLine = $state();
+  let square = $state();
   let squareX = $state();
   let squareY = $state();
-  //let topLeft = $state(); //GS
-  //let bottomRight = $state(); //GS
+  let topLeft = $state();
+  let bottomRight = $state();
 
-  //let selectWidth: number = $state();  //GS
-  //let selectHeight: number = $state(); //GS
+  let selectWidth: number = $state();
+  let selectHeight: number = $state();
 
-
-  let { top, left, right, bottom, topLeft, bottomRight,  selectWidth, selectHeight } =  $derived.by(() => {
-
-    let top  = 0;
-    let left = 0;
-    let right = 0;
-    let bottom = 0;
-    let topLeft = 0;
-    let bottomRight  =0;
-    let selectWidth = 0;
-    let selectHeight = 0;
-
-   if (mounted) {
-      let tl = (selected && decode(selected[0])) || { c: 0, r: 0 };
-      let br = (selected && decode(selected[1])) || { c: 0, r: 0 };
-      topLeft = {
-        c: br.c < tl.c ? br.c : tl.c,
-        r: br.r < tl.r ? br.r : tl.r
-      };
-      bottomRight = {
-        c: br.c > tl.c ? br.c + 1 : tl.c + 1,
-        r: br.r > tl.r ? br.r + 1 : tl.r + 1
-      };
-
-
-      let tlid = 'td_' + String(topLeft.r) + '_' + String(topLeft.c);
-      let brid = 'td_' + String(bottomRight.r) + '_' + String(bottomRight.c);
-
-      let tl_ele = document.querySelector('#' + tlid);
-      let br_ele = document.querySelector('#' + brid);
-
-      if (tl_ele != null && br_ele != null) {
-        //console.dir(tl_ele);
-        //console.log('clientHeight:', tl_ele.clientHeight);
-        //console.log('clientWidth :', tl_ele.clientWidth);
-        //console.log('clientLeft  :', tl_ele.clientLeft);
-        //console.log('clientTop   :', tl_ele.clientTop);
-
-        //console.log('offsetHeight:', tl_ele.offsetHeight);
-        //console.log('offsetWidth :', tl_ele.offsetWidth);
-        //console.log('offsetLeft  :', tl_ele.offsetLeft);
-        //console.log('offsetTop   :', tl_ele.offsetTop);
-
-        //console.log('top', top);
-        //console.log('left', left);
-        //console.log('right', right);
-        //console.log('bottom', bottom);
-
-        //top = tl_ele.offsetTop;
-        //left = tl_ele.offsetLeft;
-        //right = left + tl_ele.clientWidth;
-        //bottom = top + tl_ele.clientHeight;
-
-        top = tl_ele.offsetTop;
-        left = tl_ele.offsetLeft;
-        right = br_ele.offsetLeft;
-        bottom = br_ele.offsetTop;
-        selectWidth = right - left;
-        selectHeight = bottom - top;
-      }
-      return { top, left, right, bottom, topLeft, bottomRight,  selectWidth, selectHeight } ;
-
-    } else {
-      return { top, left, right, bottom, topLeft, bottomRight,  selectWidth, selectHeight } ;
-
-    }
-   });
- 
 
   // history logic
 
@@ -605,9 +550,8 @@
     ...defaultconfig,
     ...(options || {})
   });
-
   // initialize and refactor data
-  $effect(() => {
+  run(() => {
     (() => {
       if (data[0]) {
         if (!Array.isArray(data[0])) {
@@ -647,8 +591,7 @@
       }
     })();
   });
-
-  $effect(() => {
+  run(() => {
     (function scrollY() {
       if (!scrollTop || !rowElements) return;
 
@@ -681,8 +624,8 @@
       bottom = remaining * average_height;
     })();
   });
-
-  $effect(() => {
+  //let xrows = $derived(endY > data.length ? Array.from({ length: endY - data.length }) : []);
+  run(() => {
     (function scrollX() {
       if (!scrollLeft || !colElements) return;
       // if (!scrollLeft) ;
@@ -715,24 +658,22 @@
       right = remaining * average_width;
     })();
   });
+  //let xcolumns =
+  //  $derived(endX > columns.length ? Array.from({ length: endX - columns.length }, (v, i) => ({})) : []);
   
   
   // whenever `items` changes, invalidate the current heightmap
-
-  $effect(() => {
+  run(() => {
     if (mounted) refresh(data, viewport_height, viewport_width);
   });
-
-
-  $effect(() => {
+  run(() => {
     try {
       currentValue = data[decoded[0].r][decoded[0].c];
     } catch (e) {
       currentValue = '';
     }
   });
-
-  $effect(() => {
+  run(() => {
     if (extension && extended) {
       let tl = (selected && decode(extended[0])) || { c: 0, r: 0 };
       let br = (selected && decode(extended[1])) || { c: 0, r: 0 };
@@ -745,6 +686,8 @@
         r: br.r > tl.r ? br.r + 1 : tl.r + 1
       };
 
+      console.log('topLeft', topLeft);
+      console.log('bottomRight', bottomRight);
 
       let top = 28;
       let right = 51;
@@ -769,16 +712,15 @@
       leftextend.style = `height: ${bottom - top}px; left: ${left}px; top: ${top}px`;
     }
   });
-
-  $effect(() => {
+  run(() => {
     if (mounted) {
       let tl = (selected && decode(selected[0])) || { c: 0, r: 0 };
       let br = (selected && decode(selected[1])) || { c: 0, r: 0 };
-      let topLeft = {
+      topLeft = {
         c: br.c < tl.c ? br.c : tl.c,
         r: br.r < tl.r ? br.r : tl.r
       };
-      let bottomRight = {
+      bottomRight = {
         c: br.c > tl.c ? br.c + 1 : tl.c + 1,
         r: br.r > tl.r ? br.r + 1 : tl.r + 1
       };
@@ -793,11 +735,31 @@
       let br_ele = document.querySelector('#' + brid);
 
       if (tl_ele != null && br_ele != null) {
+        //console.dir(tl_ele);
+        //console.log('clientHeight:', tl_ele.clientHeight);
+        //console.log('clientWidth :', tl_ele.clientWidth);
+        //console.log('clientLeft  :', tl_ele.clientLeft);
+        //console.log('clientTop   :', tl_ele.clientTop);
 
-        let top = tl_ele.offsetTop;
-        let left = tl_ele.offsetLeft;
-        let right = br_ele.offsetLeft;
-        let bottom = br_ele.offsetTop;
+        //console.log('offsetHeight:', tl_ele.offsetHeight);
+        //console.log('offsetWidth :', tl_ele.offsetWidth);
+        //console.log('offsetLeft  :', tl_ele.offsetLeft);
+        //console.log('offsetTop   :', tl_ele.offsetTop);
+
+        //console.log('top', top);
+        //console.log('left', left);
+        //console.log('right', right);
+        //console.log('bottom', bottom);
+
+        //top = tl_ele.offsetTop;
+        //left = tl_ele.offsetLeft;
+        //right = left + tl_ele.clientWidth;
+        //bottom = top + tl_ele.clientHeight;
+
+        top = tl_ele.offsetTop;
+        left = tl_ele.offsetLeft;
+        right = br_ele.offsetLeft;
+        bottom = br_ele.offsetTop;
 
         tops.style = `width: ${right - left}px; left: ${left}px; top: ${top}px`;
         rights.style = `height: ${bottom - top}px; left: ${right}px; top: ${top}px`;
@@ -806,11 +768,11 @@
         colLine.style = `width: ${right - left}px; left: ${left}px; top: 28px;`;
         rowLine.style = `height: ${bottom - top}px; left: 51px; top: ${top}px`;
         square.style = `left:${right}px; top:${bottom}px`;
+        selectWidth = right - left;
+        selectHeight = bottom - top;
       }
     }
   });
-
-
 </script>
 
 <div class="sticky_table_wrapper">
@@ -1042,21 +1004,9 @@
                     <canvas id="canvas001" width="200" height="200">
                     </canvas>
                   {:else if encode({c:x.i, r:r.i}) == "F15"}
-                     <svg id="svg1" width="200" height="200"  viewBox="-120 -120 240 240" xmlns="http://www.w3.org/2000/svg"> 
-                     </svg> 
-                  {:else}
-                      {#if r.data && (typeof  r.data[x.i] === 'string') }
-                          {#if r.data[x.i].split('\n').length < 2}
-                              {(r.data && r.data[x.i]) || '' }
-                          {:else}
-                              {#each r.data[x.i].split('\n') as line}
-                               {line}<br>
-                              {/each}
-                          {/if}
-                      {:else}
-                              {(r.data && r.data[x.i]) || '' }
-                      {/if}
-                  {/if}
+<svg id="svg1" width="200" height="200"  viewBox="-120 -120 240 240" xmlns="http://www.w3.org/2000/svg"> 
+</svg> 
+                  {:else}{(r.data && r.data[x.i]) || ''}{/if}
                 </td>
               {/each}
             </tr>
@@ -1302,7 +1252,7 @@
   }
 
 /******************************************************************/
-/*
+
 .sticky_table  thead > tr:nth-child(1){
     position: sticky;  
     top: 0px;
@@ -1331,15 +1281,15 @@
     background: blue;
     z-index: 20;
 }
-
-////.sticky_table tbody >  tr:nth-child(3) > td{
-////    position: sticky;
-////    top: 76px;
-////    background: yellow;
-////    border: 2px solid #000;
-////    z-index: 21;
-////}
-
+/*
+.sticky_table tbody >  tr:nth-child(3) > td{
+    position: sticky;
+    top: 76px;
+    background: yellow;
+    border: 2px solid #000;
+    z-index: 21;
+}
+*/
 .sticky_table  td:nth-child(2) {
     position: sticky;
     left: 50px;
@@ -1358,6 +1308,6 @@
     background: lightgreen;
     z-index:18;
 }
-*/
+
 /******************************************************************/
 </style>
