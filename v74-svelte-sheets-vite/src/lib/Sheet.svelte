@@ -42,6 +42,7 @@
   let dragging = null;
   let keypressed = $state({});
 
+  let root;
   
   interface Props {
     data?: (string | number | boolean)[][];
@@ -154,7 +155,7 @@
 
 
 
-      let table = document.getElementById('sheet_table');
+      let table = root.getElementById('sheet_table');
 
       /*
       for (let row of table.rows) {
@@ -173,7 +174,7 @@
       async function next_input_focus() {
         await tick();
         //console.log(document.getElementById('cell_editor'))
-        let cell_editor = document.getElementById('cell_editor');
+        let cell_editor = root.getElementById('cell_editor');
         cell_editor.focus();
         cell_editor.click();
       }
@@ -250,14 +251,16 @@
 
     canvas_draw();
     svg_draw();
-    make_clock();
-    make_sparks();
-
-    make_graph("stage-container3", "bou");
+    if (root != null) {
+     make_clock(root);
+     make_sparks(root);
+     make_graph(root,"stage-container3", "bou");
+    
     //make_graph("stage-container3", "oresen");
     //make_graph("stage-container3", "oresen2");
     //make_graph("stage-container3", "circle");
     //make_graph("stage-container3", "tree");
+    }
 
   }
 
@@ -266,7 +269,8 @@
 
 
   function canvas_draw() {
-      const canvas001 = document.getElementById("canvas001");
+      //const canvas001 = root.getElementById("canvas001");
+      const canvas001 = root.querySelector("#canvas001");
       //console.log("canvas", canvas001);
       if (canvas001 != null) {
          
@@ -288,7 +292,8 @@
   }
 
   function svg_draw() {
-       let svg1=document.getElementById('svg1');
+       //let svg1=document.getElementById('svg1');
+       let svg1=root.querySelector('#svg1');
        if (svg1 != null) {
            let line1=document.createElementNS('http://www.w3.org/2000/svg','line');
            line1.setAttribute('x1',-30);
@@ -548,7 +553,8 @@
   //let selectWidth: number = $state();  //GS
   //let selectHeight: number = $state(); //GS
 
-
+  //let root;
+ 
   let { top, left, right, bottom, topLeft, bottomRight,  selectWidth, selectHeight } =  $derived.by(() => {
 
     let top  = 0;
@@ -576,8 +582,8 @@
       let tlid = 'td_' + String(topLeft.r) + '_' + String(topLeft.c);
       let brid = 'td_' + String(bottomRight.r) + '_' + String(bottomRight.c);
 
-      let tl_ele = document.querySelector('#' + tlid);
-      let br_ele = document.querySelector('#' + brid);
+      let tl_ele = root.querySelector('#' + tlid);
+      let br_ele = root.querySelector('#' + brid);
 
       if (tl_ele != null && br_ele != null) {
         //console.dir(tl_ele);
@@ -822,8 +828,8 @@
       let tlid = 'td_' + String(topLeft.r) + '_' + String(topLeft.c);
       let brid = 'td_' + String(bottomRight.r) + '_' + String(bottomRight.c);
 
-      let tl_ele = document.querySelector('#' + tlid);
-      let br_ele = document.querySelector('#' + brid);
+      let tl_ele = root.querySelector('#' + tlid);
+      let br_ele = root.querySelector('#' + brid);
 
       if (tl_ele != null && br_ele != null) {
 
@@ -846,7 +852,7 @@
 
 </script>
 
-<div class="sticky_table_wrapper">
+<div class="sticky_table_wrapper" bind:this={root}>
   <div
     class="w-full sheet_container"
     class:fullscreen={!!config.fullscreen}

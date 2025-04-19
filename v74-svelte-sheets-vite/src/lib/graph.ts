@@ -2,8 +2,9 @@ import * as d3 from 'd3'
 
 // https://qiita.com/HikaruMatsunaka/items/d35c0e3a9c488b84eb0e
 //
-export function make_graph(id, type) {
- const ele = document.getElementById(id);
+export function make_graph(root, id, type) {
+ //const ele = document.getElementById(id);
+ const ele = root.querySelector("#" + id);
  
  if ( type == "bou" ) {
   const width = 500;

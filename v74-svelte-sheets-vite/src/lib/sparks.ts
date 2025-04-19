@@ -4,10 +4,11 @@ import Two from 'two.js';
 
 let two;
 
-export function make_sparks() {
+export function make_sparks(root) {
      // stage-container
      //
- const ele = document.getElementById("stage-container2");
+ //const ele = document.getElementById("stage-container2");
+ const ele = root.querySelector("#stage-container2");
  two = new Two({
   type: Two.Types.canvas,
   fullscreen: false,

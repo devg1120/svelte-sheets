@@ -8,10 +8,12 @@ let styles ;
 let hands ;
 let two;
 
-export function make_clock() {
+export function make_clock(root) {
+
      // stage-container
      //
-     const stage = document.getElementById("stage-container");
+     //const stage = document.getElementById("stage-container");
+     const stage = root.querySelector("#stage-container");
      
      two = new Two({
        type: Two.Types.svg,
