@@ -9,6 +9,8 @@
   let open = $state();
   let currentValue = $state("");
   let selected = $state(false);
+  let selected1 = $state(false);
+  let selected2 = $state(false);
   let active = $state(0);
   let sheets = $state([example]);
   let sheetNames = $state([]);
@@ -96,7 +98,7 @@
     options={{ tableHeight: '90vh' }}
     style={sheet.style || {}}
     bind:currentValue={currentValue}
-    bind:selected={selected}
+    bind:selected={selected1}
   />
   </Pane>
   <Pane>
@@ -109,7 +111,7 @@
     options={{ tableHeight: '90vh' }}
     style={sheet.style || {}}
     bind:currentValue={currentValue}
-    bind:selected={selected}
+    bind:selected={selected2}
   />
   </Pane>
  </Splitpanes>
