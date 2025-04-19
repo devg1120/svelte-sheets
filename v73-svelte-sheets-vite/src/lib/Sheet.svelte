@@ -19,6 +19,7 @@
 
   import { make_clock } from './clock';
   import { make_sparks } from './sparks';
+  import { make_graph } from './graph';
 
   const encode = ({ c, r }) => XLSX.utils.encode_cell({ c: Number(c), r: Number(r) });
   const decode = XLSX.utils.decode_cell;
@@ -251,6 +252,12 @@
     svg_draw();
     make_clock();
     make_sparks();
+
+    make_graph("stage-container3", "bou");
+    //make_graph("stage-container3", "oresen");
+    //make_graph("stage-container3", "oresen2");
+    //make_graph("stage-container3", "circle");
+    //make_graph("stage-container3", "tree");
 
   }
 
@@ -1076,6 +1083,9 @@
                   {:else if encode({c:x.i, r:r.i}) == "F31"}
                      <div  id="stage-container2">
                      </div>
+                  {:else if encode({c:x.i, r:r.i}) == "F41"}
+                     <div  id="stage-container3">
+                     </div>
                   {:else}
                       {#if r.data && (typeof  r.data[x.i] === 'string') }
                           {#if r.data[x.i].split('\n').length < 2}
@@ -1392,4 +1402,5 @@
 }
 */
 /******************************************************************/
+
 </style>
