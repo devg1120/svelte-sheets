@@ -847,9 +847,6 @@
 
       let tlid = 'td_' + String(topLeft.r) + '_' + String(topLeft.c);
       let brid = 'td_' + String(bottomRight.r) + '_' + String(bottomRight.c);
-      console.log("selected",tlid, brid);
-
-      // tlid  merge cell check
 
       let tl_ele = root.querySelector('#' + tlid);
       let br_ele = root.querySelector('#' + brid);
