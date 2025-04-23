@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>e-virt-table</title>
+    </head>
+    <script src="https://unpkg.com/e-virt-table/dist/index.umd.js"></script>
+    <style>
+        .e-virt-table-editor-textarea {
+            background-color: #141414;
+            color: #a3a6ad;
+        }
+    </style>
+    <body>
+        <div id="e-virt-table"></div>
+    </body>
+    <script>
+         function generateData(c = 1000, r = 1000) {
+            let columns = [
+                {
+                    type: 'index',
+                    key: 'index',
+                    width: 70,
+                },
+                {
+                    title: 'Date',
+                    key: 'date',
+                },
+                {
+                    title: 'Name',
+                    key: 'name',
+                },
+                {
+                    title: 'State',
+                    key: 'state',
+                },
+                {
+                    title: 'City',
+                    key: 'city',
+                },
+                {
+                    title: 'Address',
+                    key: 'address',
+                    width: 200,
+                },
+                {
+                    title: 'Zip',
+                    key: 'zip',
+                },
+            ];
+            let gcData = {};
+            for (let i = 0; i < c; i += 1) {
+                columns.push({
+                    title: `Header_${i}`,
+                    key: `gc_${i}`,
+                });
+                gcData[`gc_${i}`] = `data_${i}`;
+            }
+            let data = [];
+            let _gcData = {
+                date: '2016-05-02',
+                name: 'John',
+                state: 'California',
+                city: 'Los Angeles',
+                address: 'No. 189, Grove St, Los Angeles',
+                zip: 'CA 90036',
+                ...gcData,
+            };
+            for (let i = 0; i < r; i += 1) {
+                data.push(JSON.parse(JSON.stringify(_gcData)));
+            }
+
+            return {
+                columns,
+                data,
+            };
+        }
+      const { columns, data } = generateData(1000, 1000);
+        const target = document.getElementById('e-virt-table');
+        const themeDark = {
+            BORDER_COLOR: '#363637',
+            HEADER_BG_COLOR: '#141414',
+            BODY_BG_COLOR: '#141414',
+            HEADER_TEXT_COLOR: '#a3a6ad',
+            SCROLLER_COLOR: '#414243',
+            SCROLLER_TRACK_COLOR: '#141414',
+            SCROLLER_FOCUS_COLOR: '#a3a6ad',
+            EDIT_BG_COLOR: '#141414',
+            READONLY_TEXT_COLOR: '#a3a6ad',
+            FOOTER_BG_COLOR: '#262727',
+            AUTOFILL_POINT_BORDER_COLOR: '#a3a6ad',
+        };
+        const grid = new EVirtTable(target, {
+            data,
+            columns,
+            config: {
+                ENABLE_SELECTOR: true,
+                ENABLE_AUTOFILL: true,
+                HEIGHT: 460,
+                ...themeDark,
+            },
+        });
+    </script>
+</html>

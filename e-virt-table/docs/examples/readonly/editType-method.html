@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>e-virt-table</title>
+    </head>
+    <script src="https://unpkg.com/e-virt-table/dist/index.umd.js"></script>
+    <style></style>
+    <body>
+        <div id="e-virt-table">
+            <div id="e-virt-table-editor">
+                <input id="e-virt-table-date" style="display: none" type="date" />
+            </div>
+        </div>
+    </body>
+    <script>
+        let data = [
+            {
+                date: '2016-05-03',
+                name: 'Tom',
+                state: 'California',
+                city: 'Los Angeles',
+                address: 'No. 189, Grove St, Los Angeles',
+                zip: 'CA 90036',
+            },
+            {
+                date: '2016-05-02',
+                name: 'Tom',
+                state: 'California',
+                city: 'Los Angeles',
+                address: 'No. 189, Grove St, Los Angeles',
+                zip: 'CA 90036',
+            },
+            {
+                date: '2016-05-04',
+                name: 'Tom',
+                state: 'California',
+                city: 'Los Angeles',
+                address: 'No. 189, Grove St, Los Angeles',
+                zip: 'CA 90036',
+            },
+            {
+                date: '2016-05-01',
+                name: 'Tom',
+                state: 'California',
+                city: 'Los Angeles',
+                address: 'No. 189, Grove St, Los Angeles',
+                zip: 'CA 90036',
+            },
+            {
+                date: '2016-05-08',
+                name: 'Tom',
+                state: 'California',
+                city: 'Los Angeles',
+                address: 'No. 189, Grove St, Los Angeles',
+                zip: 'CA 90036',
+            },
+            {
+                date: '2016-05-06',
+                name: 'Tom',
+                state: 'California',
+                city: 'Los Angeles',
+                address: 'No. 189, Grove St, Los Angeles',
+                zip: 'CA 90036',
+            },
+            {
+                date: '2016-05-07',
+                name: 'Tom',
+                state: 'California',
+                city: 'Los Angeles',
+                address: 'No. 189, Grove St, Los Angeles',
+                zip: 'CA 90036',
+            },
+        ];
+        let columns = [
+            {
+                title: 'Date',
+                key: 'date',
+                editorType: 'date',
+            },
+            {
+                title: 'Name',
+                key: 'name',
+            },
+            {
+                title: 'State',
+                key: 'state',
+            },
+            {
+                title: 'City',
+                key: 'city',
+            },
+            {
+                title: 'Address',
+                key: 'address',
+                width: 200,
+            },
+            {
+                title: 'Zip',
+                key: 'zip',
+            },
+        ];
+        const target = document.getElementById('e-virt-table');
+        const editorEl = document.getElementById('e-virt-table-editor');
+        const dateEl = document.getElementById('e-virt-table-date');
+        const grid = new EVirtTable(target, {
+            data,
+            columns,
+            config: {
+                ENABLE_SELECTOR: true,
+                ENABLE_AUTOFILL: true,
+                // 方法可控制编辑器类型
+                BODY_CELL_EDITOR_METHOD: function (params) {
+                    const { rowIndex, column, row } = params;
+                    if (column.key === 'date' && rowIndex === 1) {
+                        return {
+                            type: 'text',
+                            props: {}, // 传递给编辑器的editorProps属性
+                        };
+                    }
+                },
+                BODY_CELL_STYLE_METHOD: ({ rowIndex, column }) => {
+                    if (column.key === 'date' && rowIndex === 1)
+                        return {
+                            color: 'red',
+                        };
+                    return {};
+                },
+            },
+            editorElement: editorEl,
+        });
+        grid.on('startEdit', (cell) => {
+            const { width, height, editorType } = cell;
+            // 内部已经处理了文本类型的编辑
+            if (editorType === 'text') {
+                return;
+            }
+            const drawX = cell.getDrawX();
+            const drawY = cell.getDrawY();
+            editorEl.style.left = `${drawX}px`;
+            editorEl.style.top = `${drawY}px`;
+            // Date
+            if (dateEl && ['date'].includes(editorType)) {
+                dateEl.focus();
+                dateEl.setAttribute('data-row-key', cell.rowKey);
+                dateEl.setAttribute('data-key', cell.key);
+                dateEl.style.display = 'block';
+                dateEl.style.minWidth = `${width - 1}px`;
+                dateEl.style.minHeight = `${height - 1}px`;
+                dateEl.style.border = 'none';
+                dateEl.value = cell.getValue();
+            }
+        });
+        grid.on('doneEdit', (cell) => {
+            // 内部已经处理了文本类型的编辑
+            if (cell.editorType === 'text') {
+                return;
+            }
+            if (['date'].includes(cell.editorType)) {
+                dateEl.style.display = 'none';
+            }
+            if (editorEl) {
+                editorEl.style.left = `${-10000}px`;
+                editorEl.style.top = `${-10000}px`;
+            }
+        });
+        dateEl.addEventListener('change', function (event) {
+            // 获取 input 元素的新值
+            const newValue = event.target.value;
+            const rowKey = dateEl.getAttribute('data-row-key');
+            const key = dateEl.getAttribute('data-key');
+            grid.setItemValueByEditor(rowKey, key, newValue, true, true);
+        });
+    </script>
+</html>

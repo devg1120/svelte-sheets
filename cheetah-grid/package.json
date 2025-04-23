@@ -1,0 +1,66 @@
+{
+  "name": "cheetah-grid-manager",
+  "private": true,
+  "version": "1.16.0",
+  "description": "Cheetah Grid is a high performance grid engine that works on canvas",
+  "keywords": [
+    "spreadsheet",
+    "grid",
+    "table",
+    "web-components",
+    "data",
+    "canvas",
+    "cheetah",
+    "datagrid",
+    "datatable",
+    "vue",
+    "vuejs"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/future-architect/cheetah-grid.git"
+  },
+  "author": {
+    "name": "yosuke ota",
+    "email": "otameshiyo23@gmail.com",
+    "url": "https://www.npmjs.com/~ota-meshi"
+  },
+  "contributors": [
+    {
+      "name": "yasuhiro murata",
+      "email": "y.murata.38@future.co.jp"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/future-architect/cheetah-grid/issues",
+    "email": "gr-tig-oss@future.co.jp"
+  },
+  "homepage": "https://future-architect.github.io/cheetah-grid/",
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "test": "mrpm run test --mrpm-max-workers=1",
+    "build": "mrpm run build",
+    "build:ci": "mrpm run build:ci",
+    "prune:all": "mrpm prune",
+    "lint": "mrpm run lint",
+    "echo:v": "echo $npm_package_version",
+    "check": "node ./scripts/check_readme.js && node ./scripts/check_versions.js",
+    "publish:all": "mrpm publish",
+    "update:all": "mrpm update",
+    "ci:all": "cross-env NO_UPDATE_NOTIFIER=1 mrpm ci",
+    "install:all": "cross-env NO_UPDATE_NOTIFIER=1 mrpm install",
+    "mrpm": "mrpm",
+    "format:md": "prettier --write \"./*.md\" \"./**/*.md\""
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "cross-env": "^5.2.0",
+    "eslint": "^7.11.0",
+    "eslint-plugin-html": "^6.1.0",
+    "mrpm": "^4.1.0",
+    "prettier": "^2.5.1"
+  }
+}

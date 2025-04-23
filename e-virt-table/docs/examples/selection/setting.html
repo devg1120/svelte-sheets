@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>e-virt-table</title>
+    </head>
+    <script src="https://unpkg.com/e-virt-table/dist/index.umd.js"></script>
+    <body>
+        <button id="selection-rows-btn">1,3 selection</button>
+        <button id="toggle-selection-btn">1 Switch selection</button>
+        <button id="toggle-all-selection-btn">select all</button>
+        <button id="clear-selection-btn">Deselect all</button>
+        <div id="e-virt-table"></div>
+    </body>
+    <script>
+        let data = [
+            {
+                id: '1',
+                date: '2016-05-03',
+                name: 'Tom',
+                state: 'California',
+                city: 'Los Angeles',
+                address: 'No. 189, Grove St, Los Angeles',
+                zip: 'CA 90036',
+            },
+            {
+                id: '2',
+                date: '2016-05-02',
+                name: 'Tom',
+                state: 'California',
+                city: 'Los Angeles',
+                address: 'No. 189, Grove St, Los Angeles',
+                zip: 'CA 90036',
+            },
+            {
+                id: '3',
+                date: '2016-05-04',
+                name: 'Tom',
+                state: 'California',
+                city: 'Los Angeles',
+                address: 'No. 189, Grove St, Los Angeles',
+                zip: 'CA 90036',
+            },
+            {
+                id: '4',
+                date: '2016-05-01',
+                name: 'Tom',
+                state: 'California',
+                city: 'Los Angeles',
+                address: 'No. 189, Grove St, Los Angeles',
+                zip: 'CA 90036',
+            },
+            {
+                id: '5',
+                date: '2016-05-08',
+                name: 'Tom',
+                state: 'California',
+                city: 'Los Angeles',
+                address: 'No. 189, Grove St, Los Angeles',
+                zip: 'CA 90036',
+            },
+            {
+                id: '6',
+                date: '2016-05-06',
+                name: 'Tom',
+                state: 'California',
+                city: 'Los Angeles',
+                address: 'No. 189, Grove St, Los Angeles',
+                zip: 'CA 90036',
+            },
+            {
+                id: '7',
+                date: '2016-05-07',
+                name: 'Tom',
+                state: 'California',
+                city: 'Los Angeles',
+                address: 'No. 189, Grove St, Los Angeles',
+                zip: 'CA 90036',
+            },
+        ];
+        let columns = [
+            {
+                type: 'selection',
+                key: 'selection',
+                width: 50,
+                readonly: true,
+            },
+            {
+                title: 'Date',
+                key: 'date',
+                readonly: true,
+            },
+            {
+                title: 'Name',
+                key: 'name',
+                readonly: true,
+            },
+            {
+                title: 'State',
+                key: 'state',
+                readonly: true,
+            },
+            {
+                title: 'City',
+                key: 'city',
+                readonly: true,
+            },
+            {
+                title: 'Address',
+                key: 'address',
+                readonly: true,
+                width: 200,
+            },
+            {
+                title: 'Zip',
+                key: 'zip',
+                readonly: true,
+            },
+        ];
+        const target = document.getElementById('e-virt-table');
+        const grid = new EVirtTable(target, {
+            data,
+            columns,
+        });
+        grid.on('selectionChange', (selection) => {
+            console.log('selectionChange', selection);
+        });
+        function setSelectionByRows() {
+            grid.setSelectionByRows([data[1], data[3]], true);
+        }
+
+        // 按钮点击事件
+        document.getElementById('selection-rows-btn').addEventListener('click', setSelectionByRows);
+        function clearSelection() {
+            grid.clearSelection();
+        }
+        // 按钮点击事件
+        document.getElementById('clear-selection-btn').addEventListener('click', clearSelection);
+
+        // 按钮点击事件
+        document.getElementById('toggle-selection-btn').addEventListener('click', function () {
+            grid.toggleRowSelection(data[1]);
+        });
+        document.getElementById('toggle-all-selection-btn').addEventListener('click', function () {
+            grid.toggleAllSelection();
+        });
+    </script>
+</html>
