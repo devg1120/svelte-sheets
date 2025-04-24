@@ -904,11 +904,35 @@
              for(let y = 0; y < max_y; y++) {
                tbl[y] = new Array(max_x).fill(0);
              }
-             tbl[3][6] = 1;
-             tbl[4][5] = 1;
-             tbl[4][6] = 1;
-             tbl[5][5] = 1;
-             tbl[5][6] = 1;
+
+             //tbl[3][6] = 1;
+             //tbl[4][5] = 1;
+             //tbl[4][6] = 1;
+             //tbl[5][5] = 1;
+             //tbl[5][6] = 1;
+
+
+             for (let key in mergeCells ) {
+              if ( key !== '') {
+                  let merge_top =  decode(key)
+                  let [size_c, size_r] = mergeCells[key];
+                  //console.log(key, merge_top, size_c, size_r);
+
+                  for ( let c = 1; c < size_c; c++) {
+                       //console.log(merge_top.r, merge_top.c + c);
+                       tbl[merge_top.r][merge_top.c + c] = 1;
+                  }
+                  for ( let r = 1; r < size_r; r++) {
+                     for ( let c = 0; c < size_c; c++) {
+                          //console.log(merge_top.r + r, merge_top.c + c);
+                          tbl[merge_top.r + r][merge_top.c + c] = 1;
+                     }
+                  }
+                     
+              }
+            }
+
+
 	     return tbl;
 	});
 
