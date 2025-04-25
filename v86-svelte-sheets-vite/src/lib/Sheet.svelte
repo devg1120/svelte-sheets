@@ -850,6 +850,8 @@
 
       return { top, left, right, bottom, topLeft, bottomRight,  selectWidth, selectHeight } ;
 
+      // BUG ############################################################
+      // AFTER NOT NEED
       let tlid = 'td_' + String(topLeft.r) + '_' + String(topLeft.c);
       let brid = 'td_' + String(bottomRight.r) + '_' + String(bottomRight.c);
       //console.log("selected ",selected[0],  selected[1]);
@@ -865,15 +867,15 @@
 
       if (tl_ele != null && br_ele != null) {
         //console.dir(tl_ele);
-        console.log('clientHeight:', tl_ele.clientHeight);
-        console.log('clientWidth :', tl_ele.clientWidth);
-        console.log('clientLeft  :', tl_ele.clientLeft);
-        console.log('clientTop   :', tl_ele.clientTop);
+        //console.log('clientHeight:', tl_ele.clientHeight);
+        //console.log('clientWidth :', tl_ele.clientWidth);
+        //console.log('clientLeft  :', tl_ele.clientLeft);
+        //console.log('clientTop   :', tl_ele.clientTop);
 
-        console.log('offsetHeight:', tl_ele.offsetHeight);
-        console.log('offsetWidth :', tl_ele.offsetWidth);
-        console.log('offsetLeft  :', tl_ele.offsetLeft);
-        console.log('offsetTop   :', tl_ele.offsetTop);
+        //console.log('offsetHeight:', tl_ele.offsetHeight);
+        //console.log('offsetWidth :', tl_ele.offsetWidth);
+        //console.log('offsetLeft  :', tl_ele.offsetLeft);
+        //console.log('offsetTop   :', tl_ele.offsetTop);
 
         //console.log('top', top);
         //console.log('left', left);
@@ -900,16 +902,16 @@
         selectHeight = bottom - top ;
 
       } else if (tl_ele != null && br_ele == null) {
-        console.log("--------------------------")
-        console.log('clientHeight:', tl_ele.clientHeight);
-        console.log('clientWidth :', tl_ele.clientWidth);
-        console.log('clientLeft  :', tl_ele.clientLeft);
-        console.log('clientTop   :', tl_ele.clientTop);
+        //console.log("--------------------------")
+        //console.log('clientHeight:', tl_ele.clientHeight);
+        //console.log('clientWidth :', tl_ele.clientWidth);
+        //console.log('clientLeft  :', tl_ele.clientLeft);
+        //console.log('clientTop   :', tl_ele.clientTop);
 
-        console.log('offsetHeight:', tl_ele.offsetHeight);
-        console.log('offsetWidth :', tl_ele.offsetWidth);
-        console.log('offsetLeft  :', tl_ele.offsetLeft);
-        console.log('offsetTop   :', tl_ele.offsetTop);
+        //console.log('offsetHeight:', tl_ele.offsetHeight);
+        //console.log('offsetWidth :', tl_ele.offsetWidth);
+        //console.log('offsetLeft  :', tl_ele.offsetLeft);
+        //console.log('offsetTop   :', tl_ele.offsetTop);
 
 
 
